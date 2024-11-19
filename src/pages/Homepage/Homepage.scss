@@ -1,0 +1,21 @@
+@use '../../styles/variables.scss' as *;
+
+.home {
+    height: 100vh;
+    width: 100vw;
+    background-color: $primaryColor2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+
+    &__button-container {
+        width: 20rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+}

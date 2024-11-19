@@ -1,0 +1,18 @@
+@use '../../styles/variables' as *;
+
+.start-button {
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 0.5rem 0;
+    border-radius: 10px;
+    background-color: $primaryColor3;
+    color: $primaryColor1;
+    border: 2px solid $primaryColor1;
+    transition: transform 0.4s;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $secondaryColor2;
+        transform: scale(1.05);
+    }
+}
