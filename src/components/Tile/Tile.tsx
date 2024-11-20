@@ -2,8 +2,8 @@ import './Tile.scss'
 
 interface Tile {
     room: string,
-    column: number[],
-    row: number[]
+    column: number,
+    row: number
 }
 
 interface Props {
@@ -17,7 +17,8 @@ export function Tile({ room, tileObject }: Props) {
         <div className={`tile ${room === 'playable' ? 'tile__playable' : ''}`}
 
             style={{
-                gridArea: `${tileObject.row[0]} / ${tileObject.column[0]} / ${tileObject.row[1]} / ${tileObject.column[1]}`
+                gridColumn: `${tileObject.column}`,
+                gridRow: `${tileObject.row}`
             }}>
 
             {room !== 'playable' ? <img src={room} alt={`${room} tile`} className='tile__image' /> : null}

@@ -13,14 +13,14 @@ import restaurant from '../../assets/restaurant.png'
 
 interface Tile {
     room: string,
-    column: number[],
-    row: number[]
+    column: number,
+    row: number
 }
 
 const startTile: Tile = {
     room: lobby,
-    column: [2, 3],
-    row: [2, 3]
+    column: 2,
+    row: 2
 }
 
 export function Singleplayer() {
@@ -36,11 +36,11 @@ export function Singleplayer() {
                 <img src={rooms[2]} className='gameboard__draw-tile' />
             </div>
             <div className='gameboard__game'>
-                <Tile room='playable' tileObject={{ room: 'playable', column: [2, 3], row: [1, 2] }} />
-                <Tile room='playable' tileObject={{ room: 'playable', column: [1, 2], row: [2, 3] }} />
+                <Tile room='playable' tileObject={{ room: 'playable', column: 2, row: 1 }} />
+                <Tile room='playable' tileObject={{ room: 'playable', column: 1, row: 2 }} />
                 <Tile room={lobby} tileObject={startTile} />
-                <Tile room='playable' tileObject={{ room: 'playable', column: [3, 4], row: [2, 3] }} />
-                <Tile room='playable' tileObject={{ room: 'playable', column: [2, 3], row: [3, 4] }} />
+                <Tile room='playable' tileObject={{ room: 'playable', column: 3, row: 2 }} />
+                <Tile room='playable' tileObject={{ room: 'playable', column: 2, row: 3 }} />
             </div>
         </div>
     )
