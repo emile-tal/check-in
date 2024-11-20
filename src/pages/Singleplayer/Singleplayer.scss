@@ -1,0 +1,27 @@
+@use '../../styles/variables' as *;
+
+.gameboard {
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: $primaryColor2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+
+    &__draw {
+        display: flex;
+        gap: 1rem;
+    }
+
+    &__game {
+        display: grid;
+        grid-template-columns: repeat(3, 10rem);
+        grid-template-rows: repeat(3, 10rem);
+    }
+
+    &__draw-tile {
+        width: 10rem;
+    }
+}
