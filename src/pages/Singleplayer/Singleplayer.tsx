@@ -26,10 +26,17 @@ const rooms: string[] = [ballroom, bar, golf, kitchen, pool, restaurant]
 
 export function Singleplayer() {
     const [tilesInPlay, setTilesInPlay] = useState<Tile[]>([startTile])
-    const [drawTiles, setDrawTiles] = useState<string[]>([ballroom, bar, golf])
     const [drawTileSelected, setDrawTileSelected] = useState<boolean>(false)
-    const [selectedDrawTile, setSelectedDrawTile] = useState<string>('')
+    const [selectedDrawTile, setSelectedDrawTile] = useState<[string, number]>(['', -1])
     const [gridSize, setGridSize] = useState<[number, number]>([3, 3])
+    const [takeFromDeck, setTakeFromDeck] = useState<boolean>(false)
+
+    const generateRandomRoom = (): string => {
+        const randomIndex: number = Math.round(Math.random() * 5)
+        return rooms[randomIndex]
+    }
+
+    const [drawTiles, setDrawTiles] = useState<string[]>([generateRandomRoom(), generateRandomRoom(), generateRandomRoom()])
 
     interface CoordinateTracker {
         [key: number]: number[]
@@ -75,15 +82,21 @@ export function Singleplayer() {
         return playableTileSpots
     }
 
-    const selectDrawTile = (tile: string) => {
+    const selectDrawTile = (tile: string, index: number) => {
         setDrawTileSelected(true)
-        setSelectedDrawTile(tile)
+        setSelectedDrawTile([tile, index])
+    }
+
+    const drawFromDeck = () => {
+        setDrawTileSelected(true)
+        setTakeFromDeck(true)
+        setSelectedDrawTile([generateRandomRoom(), -1])
     }
 
     const playTile = (tileObject: Tile) => {
         if (drawTileSelected) {
             const newTileInPlay: Tile = {
-                room: selectedDrawTile,
+                room: selectedDrawTile[0],
                 row: tileObject.row,
                 column: tileObject.column
             }
@@ -118,14 +131,24 @@ export function Singleplayer() {
 
             setGridSize([gridRows, gridColumns])
             setTilesInPlay(allTilesInPlay)
+            const currentDrawTiles = drawTiles
+            if (selectedDrawTile[1] !== -1) {
+                currentDrawTiles[selectedDrawTile[1]] = generateRandomRoom()
+                setDrawTiles(currentDrawTiles)
+            } else {
+                setTakeFromDeck(false)
+            }
         }
     }
 
     return (
         <div className='gameboard'>
             <div className='gameboard__draw'>
+                <div className='gameboard__draw-pile' onClick={drawFromDeck}>
+                    {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' />}
+                </div>
                 {drawTiles.map((drawTile, index) => (
-                    <img src={drawTile} className='gameboard__draw-tile' key={index} onClick={() => selectDrawTile(drawTile)} />
+                    <img src={drawTile} className='gameboard__draw-tile' key={index} onClick={() => selectDrawTile(drawTile, index)} />
                 ))}
             </div>
             <div className='gameboard__game'

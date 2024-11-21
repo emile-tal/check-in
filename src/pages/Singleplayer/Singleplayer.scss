@@ -9,10 +9,18 @@
     justify-content: center;
     align-items: center;
     gap: 3rem;
+    padding: 1rem;
 
     &__draw {
         display: flex;
         gap: 1rem;
+    }
+
+    &__draw-pile {
+        width: 10rem;
+        height: 10rem;
+        background-color: yellow;
+        margin-right: 5rem;
     }
 
     &__game {
@@ -23,5 +31,9 @@
 
     &__draw-tile {
         width: 10rem;
+    }
+
+    &__draw-pile-card {
+        width: 100%;
     }
 }
