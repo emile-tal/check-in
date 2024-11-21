@@ -26,61 +26,115 @@ const rooms: string[] = [ballroom, bar, golf, kitchen, pool, restaurant]
 
 export function Singleplayer() {
     const [tilesInPlay, setTilesInPlay] = useState<Tile[]>([startTile])
+    const [drawTiles, setDrawTiles] = useState<string[]>([ballroom, bar, golf])
+    const [drawTileSelected, setDrawTileSelected] = useState<boolean>(false)
+    const [selectedDrawTile, setSelectedDrawTile] = useState<string>('')
+    const [gridSize, setGridSize] = useState<[number, number]>([3, 3])
 
-    interface Obj {
+    interface CoordinateTracker {
         [key: number]: number[]
     }
 
     const findPlayableTileSpots = (): [number, number][] => {
         const playableTileSpots: [number, number][] = []
 
-        const rowObject: Obj = {}
+        const rowTracker: CoordinateTracker = {}
         const allRows: number[] = []
-        const columnObject: Obj = {}
+        const columnTracker: CoordinateTracker = {}
         const allColumns: number[] = []
 
         tilesInPlay.forEach((tile) => {
-            if (rowObject[tile.row]) {
-                rowObject[tile.row].push(tile.column)
+            if (rowTracker[tile.row]) {
+                rowTracker[tile.row].push(tile.column)
             } else {
-                rowObject[tile.row] = [tile.column]
+                rowTracker[tile.row] = [tile.column]
                 allRows.push(tile.row)
             }
-            if (columnObject[tile.column]) {
-                columnObject[tile.column].push(tile.row)
+            if (columnTracker[tile.column]) {
+                columnTracker[tile.column].push(tile.row)
             } else {
-                columnObject[tile.column] = [tile.row]
+                columnTracker[tile.column] = [tile.row]
                 allColumns.push(tile.column)
             }
         })
 
         tilesInPlay.forEach((tile) => {
-            if (!rowObject[tile.row - 1] || !rowObject[tile.row - 1].includes(tile.column)) {
+            if (!rowTracker[tile.row - 1] || !rowTracker[tile.row - 1].includes(tile.column)) {
                 playableTileSpots.push([tile.row - 1, tile.column])
             }
-            if (!rowObject[tile.row + 1] || !rowObject[tile.row + 1].includes(tile.column)) {
+            if (!rowTracker[tile.row + 1] || !rowTracker[tile.row + 1].includes(tile.column)) {
                 playableTileSpots.push([tile.row + 1, tile.column])
             }
-            if (!columnObject[tile.column - 1] || !columnObject[tile.column - 1].includes(tile.row)) {
+            if (!columnTracker[tile.column - 1] || !columnTracker[tile.column - 1].includes(tile.row)) {
                 playableTileSpots.push([tile.row, tile.column - 1])
             }
-            if (!columnObject[tile.column + 1] || !columnObject[tile.column + 1].includes(tile.row)) {
+            if (!columnTracker[tile.column + 1] || !columnTracker[tile.column + 1].includes(tile.row)) {
                 playableTileSpots.push([tile.row, tile.column + 1])
             }
         })
         return playableTileSpots
     }
 
+    const selectDrawTile = (tile: string) => {
+        setDrawTileSelected(true)
+        setSelectedDrawTile(tile)
+    }
+
+    const playTile = (tileObject: Tile) => {
+        if (drawTileSelected) {
+            const newTileInPlay: Tile = {
+                room: selectedDrawTile,
+                row: tileObject.row,
+                column: tileObject.column
+            }
+
+            const rowsInPlay: number[] = tilesInPlay.map((tile) => tile.row).sort((a, b) => a - b)
+            const columnsInPlay: number[] = tilesInPlay.map((tile) => tile.column).sort((a, b) => a - b)
+
+            const minRow: number = rowsInPlay[0]
+            const maxRow: number = rowsInPlay[rowsInPlay.length - 1]
+            const minColumn: number = columnsInPlay[0]
+            const maxColumn: number = columnsInPlay[columnsInPlay.length - 1]
+
+            const allTilesInPlay: Tile[] = [...tilesInPlay, newTileInPlay]
+            let gridRows: number = gridSize[0]
+            let gridColumns: number = gridSize[1]
+
+            if (newTileInPlay.row < minRow) {
+                allTilesInPlay.forEach(tile => {
+                    tile.row++
+                })
+                gridRows++
+            } else if (newTileInPlay.row > maxRow) {
+                gridRows++
+            } else if (newTileInPlay.column < minColumn) {
+                allTilesInPlay.forEach(tile => {
+                    tile.column++
+                })
+                gridColumns++
+            } else if (newTileInPlay.column > maxColumn) {
+                gridColumns++
+            }
+
+            setGridSize([gridRows, gridColumns])
+            setTilesInPlay(allTilesInPlay)
+        }
+    }
+
     return (
         <div className='gameboard'>
             <div className='gameboard__draw'>
-                <img src={rooms[0]} className='gameboard__draw-tile' />
-                <img src={rooms[1]} className='gameboard__draw-tile' />
-                <img src={rooms[2]} className='gameboard__draw-tile' />
+                {drawTiles.map((drawTile, index) => (
+                    <img src={drawTile} className='gameboard__draw-tile' key={index} onClick={() => selectDrawTile(drawTile)} />
+                ))}
             </div>
-            <div className='gameboard__game'>
+            <div className='gameboard__game'
+                style={{
+                    gridTemplateColumns: `repeat(${gridSize[1]}, 10rem)`,
+                    gridTemplateRows: `repeat(${gridSize[0]}, 10rem)`,
+                }}>
                 {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
-                    <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} />
+                    <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} />
                 ))}
                 {tilesInPlay.map((tile, index) => (
                     <Tile key={index} room={tile.room} tileObject={tile} />

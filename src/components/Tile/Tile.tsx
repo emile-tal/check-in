@@ -7,14 +7,15 @@ interface Tile {
 }
 
 interface Props {
-    room: string
-    tileObject: Tile
+    room: string,
+    tileObject: Tile,
+    handleClick?: (tileObject: Tile) => (void)
 }
 
-export function Tile({ room, tileObject }: Props) {
+export function Tile({ room, tileObject, handleClick }: Props) {
 
     return (
-        <div className={`tile ${room === 'playable' ? 'tile__playable' : ''}`}
+        <div className={`tile ${room === 'playable' ? 'tile__playable' : ''}`} onClick={() => handleClick(tileObject)}
 
             style={{
                 gridRow: `${tileObject.row}`,
