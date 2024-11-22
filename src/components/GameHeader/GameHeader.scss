@@ -1,0 +1,15 @@
+@use '../../styles/variables' as *;
+
+.game-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 $margin-mobile;
+    padding: 1rem 0;
+
+    &__stats-container {
+        display: flex;
+        gap: 2rem;
+        font-size: 1.25rem;
+    }
+}

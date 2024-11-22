@@ -1,5 +1,8 @@
 import './Singleplayer.scss'
 
+import { useEffect, useState } from 'react'
+
+import { GameHeader } from '../../components/GameHeader/GameHeader'
 import { Tile } from '../../components/Tile/Tile'
 import ballroom from '../../assets/ballroom.png'
 import bar from '../../assets/bar.png'
@@ -8,7 +11,6 @@ import kitchen from '../../assets/kitchen.png'
 import lobby from '../../assets/lobby.png'
 import pool from '../../assets/pool.png'
 import restaurant from '../../assets/restaurant.png'
-import { useState } from 'react'
 
 interface Tile {
     room: string,
@@ -30,6 +32,35 @@ export function Singleplayer() {
     const [selectedDrawTile, setSelectedDrawTile] = useState<[string, number]>(['', -1])
     const [gridSize, setGridSize] = useState<[number, number]>([3, 3])
     const [takeFromDeck, setTakeFromDeck] = useState<boolean>(false)
+    const [turnsLeft, setTurnsLeft] = useState<number>(20)
+    const [totalPoints, setTotalPoints] = useState<number>(0)
+
+    useEffect(() => {
+        interface TileTracker {
+            [key: string]: number
+        }
+
+        let points = 0
+        const lobbyTiles = tilesInPlay.filter((tile) => tile.room === '/src/assets/lobby.png')
+        lobbyTiles.forEach((lobbyTile) => {
+            const tilesAdjacentToLobby: TileTracker = {}
+            tilesInPlay.forEach((tile) => {
+                if ((tile.column === lobbyTile.column && (tile.row === lobbyTile.row + 1 || tile.row === lobbyTile.row - 1)) || (tile.row === lobbyTile.row && (tile.column === lobbyTile.column + 1 || tile.column === lobbyTile.column - 1))) {
+                    if (tilesAdjacentToLobby[tile.room]) {
+                        tilesAdjacentToLobby[tile.room]++
+                    } else {
+                        tilesAdjacentToLobby[tile.room] = 1
+                    }
+                }
+            })
+            for (const room in tilesAdjacentToLobby) {
+                if (room !== '/src/assets/lobby.png') {
+                    points += tilesAdjacentToLobby[room] ** 2
+                }
+            }
+        })
+        setTotalPoints(points)
+    }, [tilesInPlay])
 
     const generateRandomRoom = (): string => {
         const randomIndex: number = Math.round(Math.random() * 5)
@@ -83,14 +114,18 @@ export function Singleplayer() {
     }
 
     const selectDrawTile = (tile: string, index: number) => {
-        setDrawTileSelected(true)
-        setSelectedDrawTile([tile, index])
+        if (!drawTileSelected) {
+            setDrawTileSelected(true)
+            setSelectedDrawTile([tile, index])
+        }
     }
 
     const drawFromDeck = () => {
-        setDrawTileSelected(true)
-        setTakeFromDeck(true)
-        setSelectedDrawTile([generateRandomRoom(), -1])
+        if (!drawTileSelected) {
+            setDrawTileSelected(true)
+            setTakeFromDeck(true)
+            setSelectedDrawTile([generateRandomRoom(), -1])
+        }
     }
 
     const playTile = (tileObject: Tile) => {
@@ -138,11 +173,15 @@ export function Singleplayer() {
             } else {
                 setTakeFromDeck(false)
             }
+
+            setDrawTileSelected(false)
+            setTurnsLeft(prev => prev - 1)
         }
     }
 
     return (
         <div className='gameboard'>
+            <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
             <div className='gameboard__draw'>
                 <div className='gameboard__draw-pile' onClick={drawFromDeck}>
                     {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' />}
@@ -150,11 +189,12 @@ export function Singleplayer() {
                 {drawTiles.map((drawTile, index) => (
                     <img src={drawTile} className='gameboard__draw-tile' key={index} onClick={() => selectDrawTile(drawTile, index)} />
                 ))}
+                <img src={lobby} className='gameboard__lobby-draw' onClick={() => selectDrawTile(lobby, -1)} />
             </div>
             <div className='gameboard__game'
                 style={{
-                    gridTemplateColumns: `repeat(${gridSize[1]}, 10rem)`,
-                    gridTemplateRows: `repeat(${gridSize[0]}, 10rem)`,
+                    gridTemplateColumns: `repeat(${gridSize[1]}, 5rem)`,
+                    gridTemplateRows: `repeat(${gridSize[0]}, 5rem)`,
                 }}>
                 {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
                     <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} />
@@ -164,5 +204,6 @@ export function Singleplayer() {
                 ))}
             </div>
         </div>
+
     )
 }

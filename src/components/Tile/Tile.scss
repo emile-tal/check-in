@@ -1,6 +1,8 @@
+@use '../../styles/variables' as *;
+
 .tile {
-    width: 10rem;
-    height: 10rem;
+    width: $tile-size;
+    height: $tile-size;
 
     &__image {
         width: 100%;
