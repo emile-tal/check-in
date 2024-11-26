@@ -1,0 +1,46 @@
+@use '../../styles/variables' as *;
+
+.game-over-modal {
+    padding: 3rem 1rem;
+    background-color: #FFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 40rem;
+    border: 3px solid $secondaryColor1;
+    outline: 0;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        width: 80%;
+    }
+
+    &__title {
+        font-size: 3rem;
+        color: red;
+    }
+
+    &__link {
+        width: 100%;
+    }
+
+    &__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        outline: 0;
+    }
+}

@@ -3,6 +3,8 @@ import './Singleplayer.scss'
 import { useEffect, useState } from 'react'
 
 import { GameHeader } from '../../components/GameHeader/GameHeader'
+import { GameOverModal } from '../../components/GameOverModal/GameOverModal'
+import Modal from 'react-modal'
 import { Tile } from '../../components/Tile/Tile'
 import ballroom from '../../assets/ballroom.png'
 import bar from '../../assets/bar.png'
@@ -34,6 +36,9 @@ export function Singleplayer() {
     const [takeFromDeck, setTakeFromDeck] = useState<boolean>(false)
     const [turnsLeft, setTurnsLeft] = useState<number>(20)
     const [totalPoints, setTotalPoints] = useState<number>(0)
+    const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
+
+    Modal.setAppElement('#root')
 
     useEffect(() => {
         interface TileTracker {
@@ -62,8 +67,14 @@ export function Singleplayer() {
         setTotalPoints(points)
     }, [tilesInPlay])
 
+    useEffect(() => {
+        if (turnsLeft === 0) {
+            setGameOverModalIsOpen(true)
+        }
+    }, [turnsLeft])
+
     const generateRandomRoom = (): string => {
-        const randomIndex: number = Math.round(Math.random() * 5)
+        const randomIndex: number = Math.floor(Math.random() * 6)
         return rooms[randomIndex]
     }
 
@@ -179,6 +190,10 @@ export function Singleplayer() {
         }
     }
 
+    const closeGameOverModal = () => {
+        setGameOverModalIsOpen(false)
+    }
+
     return (
         <div className='gameboard'>
             <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
@@ -203,6 +218,9 @@ export function Singleplayer() {
                     <Tile key={index} room={tile.room} tileObject={tile} />
                 ))}
             </div>
+            <Modal isOpen={gameOverModalIsOpen} className='game-over-modal' overlayClassName='game-over-modal__overlay'>
+                <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={totalPoints} />
+            </Modal>
         </div>
 
     )
