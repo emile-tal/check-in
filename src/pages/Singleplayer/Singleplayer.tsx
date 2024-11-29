@@ -1,5 +1,6 @@
 import './Singleplayer.scss'
 
+import { motion, useAnimate } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 import { GameHeader } from '../../components/GameHeader/GameHeader'
@@ -8,6 +9,7 @@ import Modal from 'react-modal'
 import { Tile } from '../../components/Tile/Tile'
 import ballroom from '../../assets/ballroom.png'
 import bar from '../../assets/bar.png'
+import deck from '../../assets/draw-pile.png'
 import golf from '../../assets/golf.png'
 import kitchen from '../../assets/kitchen.png'
 import lobby from '../../assets/lobby.png'
@@ -20,15 +22,15 @@ interface Tile {
     column: number
 }
 
-const startTile: Tile = {
-    room: lobby,
-    row: 2,
-    column: 2
-}
-
 const rooms: string[] = [ballroom, bar, golf, kitchen, pool, restaurant]
 
 export function Singleplayer() {
+    const startTile: Tile = {
+        room: lobby,
+        row: 2,
+        column: 2
+    }
+
     const [tilesInPlay, setTilesInPlay] = useState<Tile[]>([startTile])
     const [drawTileSelected, setDrawTileSelected] = useState<boolean>(false)
     const [selectedDrawTile, setSelectedDrawTile] = useState<[string, number]>(['', -1])
@@ -37,6 +39,8 @@ export function Singleplayer() {
     const [turnsLeft, setTurnsLeft] = useState<number>(20)
     const [totalPoints, setTotalPoints] = useState<number>(0)
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
+    const [drawCardTarget, animateDrawCard] = useAnimate()
+    const [drawnCardTarget, animateDrawnCard] = useAnimate()
 
     Modal.setAppElement('#root')
 
@@ -124,8 +128,16 @@ export function Singleplayer() {
         return playableTileSpots
     }
 
+    const drawCardAnimation = async () => {
+        await animateDrawnCard(drawnCardTarget.current, { scaleX: 0 }, { duration: 0 })
+        await animateDrawCard(drawCardTarget.current, { x: '14.5rem' }, { duration: 0.5 })
+        await animateDrawCard(drawCardTarget.current, { scaleX: 0 }, { duration: 0.1 })
+        await animateDrawnCard(drawnCardTarget.current, { scaleX: 1 }, { duration: 0.1 })
+        await animateDrawnCard(drawnCardTarget.current, { scale: 1.2 })
+    }
+
     const selectDrawTile = (tile: string, index: number) => {
-        if (!drawTileSelected) {
+        if (!takeFromDeck) {
             setDrawTileSelected(true)
             setSelectedDrawTile([tile, index])
         }
@@ -136,6 +148,7 @@ export function Singleplayer() {
             setDrawTileSelected(true)
             setTakeFromDeck(true)
             setSelectedDrawTile([generateRandomRoom(), -1])
+            setTimeout(drawCardAnimation, 1)
         }
     }
 
@@ -186,6 +199,7 @@ export function Singleplayer() {
             }
 
             setDrawTileSelected(false)
+            setSelectedDrawTile(['', -1])
             setTurnsLeft(prev => prev - 1)
         }
     }
@@ -197,14 +211,18 @@ export function Singleplayer() {
     return (
         <div className='gameboard'>
             <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
-            <div className='gameboard__draw'>
-                <div className='gameboard__draw-pile' onClick={drawFromDeck}>
-                    {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' />}
+            <div className='gameboard__draw-container'>
+                <div className='gameboard__deck-container'>
+                    <img src={deck} className='gameboard__draw-pile' onClick={drawFromDeck} />
+                    {takeFromDeck && <img src={deck} className='gameboard__draw-card' ref={drawCardTarget} />}
+                    {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' ref={drawnCardTarget} />}
                 </div>
-                {drawTiles.map((drawTile, index) => (
-                    <img src={drawTile} className='gameboard__draw-tile' key={index} onClick={() => selectDrawTile(drawTile, index)} />
-                ))}
-                <img src={lobby} className='gameboard__lobby-draw' onClick={() => selectDrawTile(lobby, -1)} />
+                <div className='gameboard__draw'>
+                    <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? 1.2 : 1 }} />
+                    {drawTiles.map((drawTile, index) => (
+                        <motion.img key={index} src={drawTile} className={`gameboard__draw-tile ${selectedDrawTile[1] === index ? 'gameboard__draw-tile--selected' : ''}`} onClick={() => selectDrawTile(drawTile, index)} animate={{ scale: selectedDrawTile[1] === index ? 1.2 : 1 }} />
+                    ))}
+                </div>
             </div>
             <div className='gameboard__game'
                 style={{

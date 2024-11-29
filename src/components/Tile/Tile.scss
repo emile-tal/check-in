@@ -1,8 +1,8 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .tile {
-    width: $tile-size;
-    height: $tile-size;
+    @include tile;
 
     &__image {
         width: 100%;

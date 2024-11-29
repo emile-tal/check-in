@@ -4,8 +4,9 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin: 0 $margin-mobile;
-    padding: 1rem 0;
+    padding: 1rem $margin-mobile;
+    position: fixed;
+    top: 0;
 
     &__stats-container {
         display: flex;
