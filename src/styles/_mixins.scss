@@ -1,6 +1,23 @@
 @use './variables' as *;
 
+@mixin tablet {
+    @media (min-width: $tablet-width) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: $desktop-width) {
+        @content;
+    }
+}
+
 @mixin tile {
-    width: $tile-size;
-    height: $tile-size;
+    width: 5rem;
+    height: 5rem;
+
+    @include tablet {
+        width: 7.5rem;
+        height: 7.5rem;
+    }
 }

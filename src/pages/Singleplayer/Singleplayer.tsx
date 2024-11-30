@@ -41,8 +41,19 @@ export function Singleplayer() {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     Modal.setAppElement('#root')
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         interface TileTracker {
@@ -130,16 +141,25 @@ export function Singleplayer() {
 
     const drawCardAnimation = async () => {
         await animateDrawnCard(drawnCardTarget.current, { scaleX: 0 }, { duration: 0 })
-        await animateDrawCard(drawCardTarget.current, { x: '14.5rem' }, { duration: 0.5 })
+        if (isMobile) {
+            await animateDrawCard(drawCardTarget.current, { y: '7rem' }, { duration: 0.5 })
+        } else {
+            await animateDrawCard(drawCardTarget.current, { x: '19.5rem' }, { duration: 0.5 })
+        }
         await animateDrawCard(drawCardTarget.current, { scaleX: 0 }, { duration: 0.1 })
         await animateDrawnCard(drawnCardTarget.current, { scaleX: 1 }, { duration: 0.1 })
-        await animateDrawnCard(drawnCardTarget.current, { scale: 1.2 })
+        await animateDrawnCard(drawnCardTarget.current, { scale: isMobile ? 1.1 : 1.2 })
     }
 
     const selectDrawTile = (tile: string, index: number) => {
         if (!takeFromDeck) {
-            setDrawTileSelected(true)
-            setSelectedDrawTile([tile, index])
+            if (selectedDrawTile[0] === tile && (tile === lobby || selectedDrawTile[1] === index)) {
+                setDrawTileSelected(false)
+                setSelectedDrawTile(['', -1])
+            } else {
+                setDrawTileSelected(true)
+                setSelectedDrawTile([tile, index])
+            }
         }
     }
 
@@ -218,23 +238,25 @@ export function Singleplayer() {
                     {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' ref={drawnCardTarget} />}
                 </div>
                 <div className='gameboard__draw'>
-                    <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? 1.2 : 1 }} />
+                    <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? (isMobile ? 1.1 : 1.2) : 1 }} />
                     {drawTiles.map((drawTile, index) => (
-                        <motion.img key={index} src={drawTile} className={`gameboard__draw-tile ${selectedDrawTile[1] === index ? 'gameboard__draw-tile--selected' : ''}`} onClick={() => selectDrawTile(drawTile, index)} animate={{ scale: selectedDrawTile[1] === index ? 1.2 : 1 }} />
+                        <motion.img key={index} src={drawTile} className={`gameboard__draw-tile ${selectedDrawTile[1] === index ? 'gameboard__draw-tile--selected' : ''}`} onClick={() => selectDrawTile(drawTile, index)} animate={{ scale: selectedDrawTile[1] === index ? (isMobile ? 1.1 : 1.2) : 1 }} />
                     ))}
                 </div>
             </div>
-            <div className='gameboard__game'
-                style={{
-                    gridTemplateColumns: `repeat(${gridSize[1]}, 5rem)`,
-                    gridTemplateRows: `repeat(${gridSize[0]}, 5rem)`,
-                }}>
-                {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
-                    <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} />
-                ))}
-                {tilesInPlay.map((tile, index) => (
-                    <Tile key={index} room={tile.room} tileObject={tile} />
-                ))}
+            <div className='gameboard__game-container'>
+                <div className='gameboard__game'
+                    style={{
+                        gridTemplateColumns: `repeat(${gridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
+                        gridTemplateRows: `repeat(${gridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
+                    }}>
+                    {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
+                        <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} />
+                    ))}
+                    {tilesInPlay.map((tile, index) => (
+                        <Tile key={index} room={tile.room} tileObject={tile} />
+                    ))}
+                </div>
             </div>
             <Modal isOpen={gameOverModalIsOpen} className='game-over-modal' overlayClassName='game-over-modal__overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={totalPoints} />
