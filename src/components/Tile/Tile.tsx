@@ -9,13 +9,14 @@ interface Tile {
 interface Props {
     room: string,
     tileObject: Tile,
-    handleClick?: (tileObject: Tile) => (void)
+    handleClick?: (tileObject: Tile) => (void),
+    drawTileSelected?: boolean
 }
 
-export function Tile({ room, tileObject, handleClick }: Props) {
+export function Tile({ room, tileObject, handleClick, drawTileSelected }: Props) {
 
     return (
-        <div className={`tile ${room === 'playable' ? 'tile__playable' : ''}`} onClick={() => handleClick ? handleClick(tileObject) : null}
+        <div className={`tile ${room === 'playable' ? 'tile__playable' : ''} ${room === 'playable' && drawTileSelected ? 'tile__playable--visible' : ''}`} onClick={() => handleClick ? handleClick(tileObject) : null}
 
             style={{
                 gridRow: `${tileObject.row}`,

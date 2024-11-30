@@ -9,6 +9,10 @@
     }
 
     &__playable {
-        background-color: #FFF;
+        background-color: transparent;
+
+        &--visible {
+            background-color: white;
+        }
     }
 }

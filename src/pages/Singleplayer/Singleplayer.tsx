@@ -1,7 +1,7 @@
 import './Singleplayer.scss'
 
 import { motion, useAnimate } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { GameHeader } from '../../components/GameHeader/GameHeader'
 import { GameOverModal } from '../../components/GameOverModal/GameOverModal'
@@ -39,9 +39,11 @@ export function Singleplayer() {
     const [turnsLeft, setTurnsLeft] = useState<number>(20)
     const [totalPoints, setTotalPoints] = useState<number>(0)
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [newOpenCard, setNewOpenCard] = useState<boolean>(false)
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const openCardRefs = useRef<Array<[React.RefObject<HTMLElement>, any]>>([])
 
     Modal.setAppElement('#root')
 
@@ -49,9 +51,7 @@ export function Singleplayer() {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
         };
-
         window.addEventListener('resize', handleResize);
-
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -142,14 +142,40 @@ export function Singleplayer() {
     const drawCardAnimation = async () => {
         await animateDrawnCard(drawnCardTarget.current, { scaleX: 0 }, { duration: 0 })
         if (isMobile) {
-            await animateDrawCard(drawCardTarget.current, { y: '7rem' }, { duration: 0.5 })
+            await animateDrawCard(drawCardTarget.current, { y: '7rem' }, { duration: 0.25 })
         } else {
-            await animateDrawCard(drawCardTarget.current, { x: '19.5rem' }, { duration: 0.5 })
+            await animateDrawCard(drawCardTarget.current, { x: '19.5rem' }, { duration: 0.25 })
         }
         await animateDrawCard(drawCardTarget.current, { scaleX: 0 }, { duration: 0.1 })
         await animateDrawnCard(drawnCardTarget.current, { scaleX: 1 }, { duration: 0.1 })
         await animateDrawnCard(drawnCardTarget.current, { scale: isMobile ? 1.1 : 1.2 })
     }
+
+    const openCardAnimation = async (index: number) => {
+        setNewOpenCard(true)
+        const [openTileTarget, animateOpenTile] = openCardRefs.current[index]
+        const xOffset = (index + 1) * 8.5 + 2.5
+        const yOffset = 9.5
+        await animateOpenTile(openTileTarget.current, { scaleX: 0 }, { duration: 0 })
+        await animateDrawCard(drawCardTarget.current, { x: `${xOffset}rem`, y: `${yOffset}rem` }, { duration: 0.25 })
+        await animateDrawCard(drawCardTarget.current, { scaleX: 0 }, { duration: 0.1 })
+        await animateOpenTile(openTileTarget.current, { scaleX: 1 }, { duration: 0.1 })
+        setNewOpenCard(false)
+    }
+
+    // useEffect(() => {
+    //     const openStartingCards = async () => {
+    //         for (let i = 0; i < openCardRefs.current.length; i++) {
+    //             const [openTileTarget, animateOpenTile] = openCardRefs.current[i]
+    //             animateOpenTile(openTileTarget.current, { scaleX: 0 }, { duration: 0 })
+    //         }
+
+    //         setTimeout(() => openCardAnimation(0), 100)
+    //         setTimeout(() => openCardAnimation(1), 200)
+    //         setTimeout(() => openCardAnimation(2), 300)
+    //     }
+    //     openStartingCards()
+    // }, [])
 
     const selectDrawTile = (tile: string, index: number) => {
         if (!takeFromDeck) {
@@ -212,6 +238,7 @@ export function Singleplayer() {
             setTilesInPlay(allTilesInPlay)
             const currentDrawTiles = drawTiles
             if (selectedDrawTile[1] !== -1) {
+                openCardAnimation(selectedDrawTile[1])
                 currentDrawTiles[selectedDrawTile[1]] = generateRandomRoom()
                 setDrawTiles(currentDrawTiles)
             } else {
@@ -233,15 +260,27 @@ export function Singleplayer() {
             <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
             <div className='gameboard__draw-container'>
                 <div className='gameboard__deck-container'>
-                    <img src={deck} className='gameboard__draw-pile' onClick={drawFromDeck} />
-                    {takeFromDeck && <img src={deck} className='gameboard__draw-card' ref={drawCardTarget} />}
+                    <motion.img src={deck} className='gameboard__draw-pile' onClick={drawFromDeck} />
+                    {(takeFromDeck || newOpenCard) && <img src={deck} className='gameboard__draw-card' ref={drawCardTarget} />}
                     {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' ref={drawnCardTarget} />}
                 </div>
                 <div className='gameboard__draw'>
-                    <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? (isMobile ? 1.1 : 1.2) : 1 }} />
-                    {drawTiles.map((drawTile, index) => (
-                        <motion.img key={index} src={drawTile} className={`gameboard__draw-tile ${selectedDrawTile[1] === index ? 'gameboard__draw-tile--selected' : ''}`} onClick={() => selectDrawTile(drawTile, index)} animate={{ scale: selectedDrawTile[1] === index ? (isMobile ? 1.1 : 1.2) : 1 }} />
-                    ))}
+                    <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? (isMobile ? 1.1 : 1.2) : 1 }} whileTap={{ scale: 0.95 }} />
+                    {drawTiles.map((drawTile, index) => {
+                        const [openTileTarget, animateOpenTile] = useAnimate()
+                        openCardRefs.current[index] = [openTileTarget, animateOpenTile]
+                        return (
+                            < motion.img
+                                key={index}
+                                ref={openTileTarget}
+                                src={drawTile}
+                                className={`gameboard__draw-tile ${selectedDrawTile[1] === index ? 'gameboard__draw-tile--selected' : ''}`}
+                                onClick={() => selectDrawTile(drawTile, index)}
+                                animate={{ scale: selectedDrawTile[1] === index ? (isMobile ? 1.1 : 1.2) : 1 }}
+                                whileTap={{ scale: 0.95 }}
+                            />
+                        )
+                    })}
                 </div>
             </div>
             <div className='gameboard__game-container'>
@@ -251,7 +290,7 @@ export function Singleplayer() {
                         gridTemplateRows: `repeat(${gridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
                     }}>
                     {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
-                        <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} />
+                        <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} drawTileSelected={drawTileSelected} />
                     ))}
                     {tilesInPlay.map((tile, index) => (
                         <Tile key={index} room={tile.room} tileObject={tile} />
