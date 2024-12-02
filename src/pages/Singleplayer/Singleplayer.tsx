@@ -1,7 +1,6 @@
 import './Singleplayer.scss'
 
 import { motion, useAnimate } from 'motion/react'
-// import { useDrag } from 'react-dnd'
 import { useEffect, useRef, useState } from 'react'
 
 import { GameHeader } from '../../components/GameHeader/GameHeader'
@@ -16,6 +15,7 @@ import kitchen from '../../assets/kitchen.png'
 import lobby from '../../assets/lobby.png'
 import pool from '../../assets/pool.png'
 import restaurant from '../../assets/restaurant.png'
+import { useDrag } from 'react-dnd'
 
 interface Tile {
     room: string,
@@ -45,12 +45,13 @@ export function Singleplayer() {
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
     const openCardRefs = useRef<[React.RefObject<HTMLElement>, any][]>([])
-    // const [{ isDragging }, openTileTarget] = useDrag({
-    //     type: 'tile',
-    //     collect: (monitor) => ({
-    //         isDragging: monitor.isDragging(),
-    //     })
-    // })
+
+    const [{ isDragging }, openTileTarget] = useDrag({
+        type: 'tile',
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        })
+    })
 
     Modal.setAppElement('#root')
 
@@ -201,7 +202,7 @@ export function Singleplayer() {
             setDrawTileSelected(true)
             setTakeFromDeck(true)
             setSelectedDrawTile([generateRandomRoom(), -1])
-            drawCardAnimation()
+            //drawCardAnimation()
             setTimeout(drawCardAnimation, 1)
         }
     }
@@ -274,6 +275,7 @@ export function Singleplayer() {
                 </div>
                 <div className='gameboard__draw'>
                     <motion.img src={lobby} className={`gameboard__lobby-draw ${selectedDrawTile[0] === lobby ? 'gameboard__lobby-draw--selected' : ''}`} onClick={() => selectDrawTile(lobby, -1)} animate={{ scale: selectedDrawTile[0] === lobby ? (isMobile ? 1.1 : 1.2) : 1 }} whileTap={{ scale: 0.95 }} />
+
                     {drawTiles.map((drawTile, index) => {
                         const [openTileTarget, animateOpenTile] = useAnimate()
                         openCardRefs.current[index] = [openTileTarget, animateOpenTile]
@@ -289,6 +291,7 @@ export function Singleplayer() {
                             />
                         )
                     })}
+
                 </div>
             </div>
             <div className='gameboard__game-container'>
