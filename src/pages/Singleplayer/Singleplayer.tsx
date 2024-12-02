@@ -1,6 +1,7 @@
 import './Singleplayer.scss'
 
 import { motion, useAnimate } from 'motion/react'
+// import { useDrag } from 'react-dnd'
 import { useEffect, useRef, useState } from 'react'
 
 import { GameHeader } from '../../components/GameHeader/GameHeader'
@@ -43,7 +44,13 @@ export function Singleplayer() {
     const [newOpenCard, setNewOpenCard] = useState<boolean>(false)
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
-    const openCardRefs = useRef<Array<[React.RefObject<HTMLElement>, any]>>([])
+    const openCardRefs = useRef<[React.RefObject<HTMLElement>, any][]>([])
+    // const [{ isDragging }, openTileTarget] = useDrag({
+    //     type: 'tile',
+    //     collect: (monitor) => ({
+    //         isDragging: monitor.isDragging(),
+    //     })
+    // })
 
     Modal.setAppElement('#root')
 
@@ -194,6 +201,7 @@ export function Singleplayer() {
             setDrawTileSelected(true)
             setTakeFromDeck(true)
             setSelectedDrawTile([generateRandomRoom(), -1])
+            drawCardAnimation()
             setTimeout(drawCardAnimation, 1)
         }
     }
@@ -260,7 +268,7 @@ export function Singleplayer() {
             <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
             <div className='gameboard__draw-container'>
                 <div className='gameboard__deck-container'>
-                    <motion.img src={deck} className='gameboard__draw-pile' onClick={drawFromDeck} />
+                    <img src={deck} className='gameboard__draw-pile' onClick={drawFromDeck} />
                     {(takeFromDeck || newOpenCard) && <img src={deck} className='gameboard__draw-card' ref={drawCardTarget} />}
                     {takeFromDeck && <img src={selectedDrawTile[0]} className='gameboard__draw-pile-card' ref={drawnCardTarget} />}
                 </div>
@@ -290,7 +298,13 @@ export function Singleplayer() {
                         gridTemplateRows: `repeat(${gridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
                     }}>
                     {tilesInPlay && findPlayableTileSpots().map((coordinates, index) => (
-                        <Tile key={index} room='playable' tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }} handleClick={playTile} drawTileSelected={drawTileSelected} />
+                        <Tile
+                            key={index}
+                            room='playable'
+                            tileObject={{ room: 'playable', row: coordinates[0], column: coordinates[1] }}
+                            handleClick={playTile}
+                            drawTileSelected={drawTileSelected}
+                        />
                     ))}
                     {tilesInPlay.map((tile, index) => (
                         <Tile key={index} room={tile.room} tileObject={tile} />
