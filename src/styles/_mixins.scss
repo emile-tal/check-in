@@ -21,3 +21,11 @@
         height: 7.5rem;
     }
 }
+
+@mixin page-background {
+    background-image: url('../../assets/game-background.png');
+    background-color: rgba(255, 255, 255, 0.6);
+    background-position: center;
+    background-blend-mode: overlay;
+    background-size: cover;
+}
