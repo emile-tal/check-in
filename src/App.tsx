@@ -3,7 +3,7 @@ import './App.scss'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { Homepage } from './pages/Homepage/Homepage'
-import { Singleplayer } from './pages/Singleplayer/Singleplayer'
+import Singleplayer from './pages/Singleplayer/Singleplayer'
 
 function App() {
 

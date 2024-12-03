@@ -2,18 +2,17 @@ import "./Singleplayer.scss"
 
 import { useEffect, useState } from "react"
 
-import { Game } from "../../components/Game/Game"
+import { Game } from "../../Game"
+import { GameContainer } from "../../components/GameContainer/GameContainer"
 import { GameHeader } from "../../components/GameHeader/GameHeader"
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal"
 import Modal from 'react-modal'
+import { observer } from "mobx-react"
 
-export function Singleplayer() {
-    const [turnsLeft, setTurnsLeft] = useState<number>(20)
-    const [totalPoints, setTotalPoints] = useState<number>(0)
+const game = new Game()
+
+const SinglePlayer = observer(function Singleplayer() {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
-
-    const updateTotalPoints = (points: number) => setTotalPoints(points)
-    const updateTurnsLeft = () => setTurnsLeft(prev => prev - 1)
 
     Modal.setAppElement('#root')
 
@@ -22,18 +21,20 @@ export function Singleplayer() {
     }
 
     useEffect(() => {
-        if (turnsLeft === 0) {
+        if (game.turnsLeft === 0) {
             setGameOverModalIsOpen(true)
         }
-    }, [turnsLeft])
+    }, [game.turnsLeft])
 
     return (
         <div className="singleplayer">
-            <GameHeader turnsLeft={turnsLeft} totalPoints={totalPoints} />
-            <Game updateTotalPoints={updateTotalPoints} updateTurnsLeft={updateTurnsLeft} />
+            <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} />
+            <GameContainer game={game} />
             <Modal isOpen={gameOverModalIsOpen} className='game-over-modal' overlayClassName='game-over-modal__overlay'>
-                <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={totalPoints} />
+                <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>
         </div>
     )
-}
+})
+
+export default SinglePlayer
