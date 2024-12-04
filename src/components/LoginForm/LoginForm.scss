@@ -48,12 +48,25 @@
         gap: 0.5rem;
     }
 
+    &__label {
+        padding-top: 0.25rem;
+    }
+
     &__input {
         outline: none;
         border: 0;
         border-radius: 4px;
-        margin-bottom: 0.25rem;
         padding: 0.25rem 0.5rem;
+
+        &--invalid {
+            border: 1px solid red;
+        }
+    }
+
+    &__error {
+        color: red;
+        font-size: 0.75rem;
+        padding: 0;
     }
 
     &__guest-button-container {
