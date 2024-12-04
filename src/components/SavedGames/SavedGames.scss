@@ -1,9 +1,53 @@
 @use '../../styles/variables' as *;
 
 .saved-games {
-    gap: 1rem;
     padding: 1.5rem;
-    width: 20rem;
+    width: 30rem;
     background-color: $primaryColor3;
     border-radius: 10px;
+
+    &__container {
+        padding-bottom: 2rem;
+    }
+
+    &__header-container {
+        display: flex;
+        padding-bottom: 2rem;
+    }
+
+    &__header {
+        display: inline-block;
+
+        &--game {
+            width: 10rem;
+        }
+
+        &--date {
+            width: 12rem;
+        }
+
+        &--type {
+            width: 8rem;
+        }
+    }
+
+    &__row {
+        list-style: none;
+        display: flex;
+        padding-bottom: 0.5rem;
+    }
+
+    &__item {
+        &--game {
+            width: 10rem;
+        }
+
+        &--date {
+            width: 12rem;
+        }
+
+        &--type {
+            width: 8rem;
+        }
+    }
 }

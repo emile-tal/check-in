@@ -46,21 +46,26 @@ export function SavedGames() {
         navigate('/home')
     }
 
+    const formatDate = (date: string): string => {
+        const timestamp: Date = new Date(date)
+        return timestamp.toLocaleDateString()
+    }
+
     return (
         <div className='saved-games'>
             {isLoggedIn ? (
                 allGames ? (
                     <div className='saved-games__container'>
                         <div className='saved-games__header-container'>
-                            <h2 className='saved-games__header'>Game</h2>
-                            <h2 className='saved-games__header'>Last played</h2>
-                            <h2 className='saved-games__header'>Type</h2>
+                            <h2 className='saved-games__header--game'>Game</h2>
+                            <h2 className='saved-games__header--date'>Last played</h2>
+                            <h2 className='saved-games__header--type'>Type</h2>
                         </div>
                         {allGames.map((game) => (
                             <ul className='saved-games__row' key={game.id}>
-                                <li className='saved-games__item'>{game.name}</li>
-                                <li className='saved-games__item'>{game.updated_at}</li>
-                                <li className='saved-games__item'>{game.is_singleplayer ? 'Singleplayer' : 'Multiplayer'}</li>
+                                <li className='saved-games__item--game'>{game.name}</li>
+                                <li className='saved-games__item--date'>{formatDate(game.updated_at)}</li>
+                                <li className='saved-games__item--type'>{game.is_singleplayer ? 'Singleplayer' : 'Multiplayer'}</li>
                             </ul>
                         ))}
                     </div>
