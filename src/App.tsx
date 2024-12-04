@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { Homepage } from './pages/Homepage/Homepage'
 import { Login } from './pages/Login/Login'
 import Singleplayer from './pages/Singleplayer/Singleplayer'
+import { Stats } from './pages/Stats/Stats'
 import axios from 'axios'
 
 interface User {
@@ -34,6 +35,7 @@ function App() {
     const jwtToken = localStorage.getItem('jwt_token')
     if (jwtToken) {
       fetchUser(jwtToken)
+      setIsLoggedIn(true)
     }
   }, [])
 
@@ -54,6 +56,7 @@ function App() {
         <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
         <Route path='/home' element={<Homepage user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
         <Route path='/play' element={<Singleplayer />} />
+        <Route path='/stats' element={<Stats />} />
       </Routes>
     </BrowserRouter>
   )

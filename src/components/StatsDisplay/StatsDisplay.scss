@@ -1,0 +1,15 @@
+@use '../../styles/variables' as *;
+
+.stats-display {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    width: 20rem;
+    background-color: $primaryColor3;
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+    }
+}

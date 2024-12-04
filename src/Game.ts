@@ -172,6 +172,16 @@ class Game {
         this.drawTileSelected = false
         this.selectedDrawTile = ['', -1]
     }
+
+    restart() {
+        this.tilesInPlay = [startTile]
+        this.turnsLeft = 20
+        this.gridSize = [3, 3]
+        this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
+        this.selectedDrawTile = ['', -1]
+        this.drawTileSelected = false
+        this.deckTileSelected = false
+    }
 }
 
 export { Game }

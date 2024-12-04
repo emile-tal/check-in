@@ -7,6 +7,7 @@ import { GameContainer } from "../../components/GameContainer/GameContainer"
 import { GameHeader } from "../../components/GameHeader/GameHeader"
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal"
 import Modal from 'react-modal'
+import axios from "axios"
 import { observer } from "mobx-react"
 
 const game = new Game()
@@ -16,13 +17,44 @@ const SinglePlayer = observer(function Singleplayer() {
 
     Modal.setAppElement('#root')
 
+    const baseUrl = import.meta.env.VITE_API_URL
+
+    const fetchStats = async (jwtToken: string) => {
+        try {
+            const { data } = await axios.get(`${baseUrl}stats`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const updateStats = async (jwtToken: string) => {
+        try {
+            const { games_played_single, games_played_multi, total_points, max_score } = await fetchStats(jwtToken)
+            const updatedStats = {
+                games_played_single: games_played_single + 1,
+                games_played_multi,
+                total_points: total_points + game.totalPoints,
+                max_score: max_score < game.totalPoints ? game.totalPoints : max_score
+            }
+            await axios.put(`${baseUrl}stats`, updatedStats, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const closeGameOverModal = () => {
         setGameOverModalIsOpen(false)
+        game.restart()
     }
 
     useEffect(() => {
         if (game.turnsLeft === 0) {
             setGameOverModalIsOpen(true)
+            const jwtToken = localStorage.getItem('jwt_token')
+            if (jwtToken) {
+                updateStats(jwtToken)
+            }
         }
     }, [game.turnsLeft])
 

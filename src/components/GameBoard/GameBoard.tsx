@@ -11,8 +11,8 @@ interface Props {
 
 const GameBoard = observer(function GameBoard({ game, isMobile }: Props) {
     return (
-        <div className='game__game-container'>
-            <div className='game__game'
+        <div className='gameboard'>
+            <div className='gameboard__game'
                 style={{
                     gridTemplateColumns: `repeat(${game.gridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
                     gridTemplateRows: `repeat(${game.gridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,

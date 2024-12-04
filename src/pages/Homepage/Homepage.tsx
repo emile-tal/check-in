@@ -29,14 +29,22 @@ export function Homepage({ user, isLoggedIn, login, logout }: Props) {
         navigate('/')
     }
 
+    const goToStats = () => {
+        navigate('/stats')
+    }
+
+    const goToLogin = () => {
+        navigate('/')
+    }
+
     return (
         <div className='home'>
             <h1 className='home__logo'>{`Welcome ${isLoggedIn ? user.username : 'Guest'}`}</h1>
             <div className='home__button-container'>
                 <Link to={'/play'} className='home__link'><Button text='SINGLEPLAYER' style='primary' /></Link>
-                <Button text='LOAD GAME' style='primary' />
-                <Button text='STATS' style='primary' />
-                <Button text='LOG OUT' style='primary' onClick={handleLogout} />
+                <Button text='LOAD GAME' style={isLoggedIn ? 'primary' : 'primary-unclickable'} />
+                <Button text='STATS' style={isLoggedIn ? 'primary' : 'primary-unclickable'} onClick={goToStats} />
+                <Button text={isLoggedIn ? 'LOG OUT' : "LOG IN"} style='primary' onClick={isLoggedIn ? handleLogout : goToLogin} />
             </div>
         </div>
     )

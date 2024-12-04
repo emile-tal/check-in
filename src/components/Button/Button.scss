@@ -22,6 +22,14 @@
         }
     }
 
+    &--primary-unclickable {
+        background-color: gray;
+        color: $primaryColor1;
+        border: 2px solid $primaryColor1;
+        font-size: 1.5rem;
+        pointer-events: none;
+    }
+
     &--login {
         background-color: $primaryColor1;
         color: $primaryColor3;
