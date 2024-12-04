@@ -1,0 +1,10 @@
+@use '../../styles/mixins.scss' as *;
+
+.load-game-page {
+    width: 100vw;
+    height: 100vh;
+    @include page-background;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

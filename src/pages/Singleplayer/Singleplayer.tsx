@@ -51,6 +51,7 @@ const SinglePlayer = observer(function Singleplayer() {
 
     const restartGame = () => {
         game.restart()
+        closeSettingsModal()
     }
 
     const closeGameOverModal = () => {

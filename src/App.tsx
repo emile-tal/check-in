@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import { Homepage } from './pages/Homepage/Homepage'
+import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
 import { Login } from './pages/Login/Login'
 import Singleplayer from './pages/Singleplayer/Singleplayer'
 import { Stats } from './pages/Stats/Stats'
@@ -57,6 +58,7 @@ function App() {
         <Route path='/home' element={<Homepage user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
         <Route path='/play' element={<Singleplayer />} />
         <Route path='/stats' element={<Stats />} />
+        <Route path='/saved' element={<LoadGamePage />} />
       </Routes>
     </BrowserRouter>
   )

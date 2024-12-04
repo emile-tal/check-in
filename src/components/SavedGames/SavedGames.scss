@@ -1,0 +1,9 @@
+@use '../../styles/variables' as *;
+
+.saved-games {
+    gap: 1rem;
+    padding: 1.5rem;
+    width: 20rem;
+    background-color: $primaryColor3;
+    border-radius: 10px;
+}

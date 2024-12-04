@@ -15,7 +15,7 @@ export function GameOverModal({ totalPoints, closeGameOverModal }: Props) {
     }
 
     return (
-        <div className='game-over-modal__container'>
+        <div className='game-over-modal'>
             <h2 className='game-over-modal__title'>GAME OVER</h2>
             <p className='game-over-modal__points'>You scored a total of <strong>{totalPoints}</strong> points!</p>
             <Link to={'/home'} className='game-over-modal__link' onClick={closeGameOverModal}><Button text='RETURN HOME' style='primary' /></Link>
