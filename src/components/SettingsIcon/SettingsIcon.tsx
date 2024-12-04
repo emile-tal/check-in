@@ -1,11 +1,16 @@
 import './SettingsIcon.scss'
 
-export function SettingsIcon() {
+interface Props {
+    openSettingsModal: () => void
+}
+
+export function SettingsIcon({ openSettingsModal }: Props) {
     return (
         <svg
             viewBox="0 0 512 512"
             fill="currentColor"
             className="settings-icon"
+            onClick={openSettingsModal}
         >
             <path
                 fill="none"

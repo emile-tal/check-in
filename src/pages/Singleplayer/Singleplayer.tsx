@@ -7,6 +7,7 @@ import { GameContainer } from "../../components/GameContainer/GameContainer"
 import { GameHeader } from "../../components/GameHeader/GameHeader"
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal"
 import Modal from 'react-modal'
+import { SettingsModal } from "../../components/SettingsModal/SettingsModal"
 import axios from "axios"
 import { observer } from "mobx-react"
 
@@ -14,6 +15,7 @@ const game = new Game()
 
 const SinglePlayer = observer(function Singleplayer() {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
+    const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
 
     Modal.setAppElement('#root')
 
@@ -43,9 +45,21 @@ const SinglePlayer = observer(function Singleplayer() {
         }
     }
 
+    const openSettingsModal = () => {
+        setSettingsModalIsOpen(true)
+    }
+
+    const restartGame = () => {
+        game.restart()
+    }
+
     const closeGameOverModal = () => {
         setGameOverModalIsOpen(false)
-        game.restart()
+        restartGame()
+    }
+
+    const closeSettingsModal = () => {
+        setSettingsModalIsOpen(false)
     }
 
     useEffect(() => {
@@ -60,10 +74,13 @@ const SinglePlayer = observer(function Singleplayer() {
 
     return (
         <div className="singleplayer">
-            <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} />
+            <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} />
             <GameContainer game={game} />
-            <Modal isOpen={gameOverModalIsOpen} className='game-over-modal' overlayClassName='game-over-modal__overlay'>
+            <Modal isOpen={gameOverModalIsOpen} className='singleplayer__modal' overlayClassName='singleplayer__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
+            </Modal>
+            <Modal isOpen={settingsModalIsOpen} className='singleplayer__modal' overlayClassName='singleplayer__modal-overlay' onRequestClose={closeSettingsModal} >
+                <SettingsModal restartGame={restartGame} closeSettingsModal={closeSettingsModal} />
             </Modal>
         </div>
     )

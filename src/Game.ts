@@ -34,7 +34,7 @@ class Game {
             totalPoints: computed,
             playableTileSpots: computed
         })
-        this.tilesInPlay = [startTile]
+        this.tilesInPlay = [JSON.parse(JSON.stringify(startTile))]
         this.turnsLeft = 20
         this.gridSize = [3, 3]
         this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
@@ -174,7 +174,7 @@ class Game {
     }
 
     restart() {
-        this.tilesInPlay = [startTile]
+        this.tilesInPlay = [JSON.parse(JSON.stringify(startTile))]
         this.turnsLeft = 20
         this.gridSize = [3, 3]
         this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
