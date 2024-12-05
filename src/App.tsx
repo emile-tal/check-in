@@ -3,6 +3,7 @@ import './App.scss'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
+import { Game } from './Game'
 import { Homepage } from './pages/Homepage/Homepage'
 import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
 import { Login } from './pages/Login/Login'
@@ -14,6 +15,7 @@ interface User {
   username: string
   id: number
 }
+const game = new Game()
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -56,9 +58,9 @@ function App() {
       <Routes>
         <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
         <Route path='/home' element={<Homepage user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
-        <Route path='/play' element={<Singleplayer />} />
+        <Route path='/play' element={<Singleplayer game={game} />} />
         <Route path='/stats' element={<Stats />} />
-        <Route path='/saved' element={<LoadGamePage />} />
+        <Route path='/saved' element={<LoadGamePage game={game} />} />
       </Routes>
     </BrowserRouter>
   )

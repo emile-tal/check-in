@@ -11,9 +11,11 @@ import { SettingsModal } from "../../components/SettingsModal/SettingsModal"
 import axios from "axios"
 import { observer } from "mobx-react"
 
-const game = new Game()
+interface Props {
+    game: Game
+}
 
-const SinglePlayer = observer(function Singleplayer() {
+const SinglePlayer = observer(function Singleplayer({ game }: Props) {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
 

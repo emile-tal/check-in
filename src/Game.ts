@@ -21,8 +21,6 @@ const generateRandomRoom = (): string => {
 
 class Game {
     tilesInPlay: Tile[]
-    turnsLeft: number
-    gridSize: [number, number]
     drawTiles: string[]
     selectedDrawTile: [string, number]
     drawTileSelected: boolean
@@ -32,11 +30,11 @@ class Game {
     constructor() {
         makeAutoObservable(this, {
             totalPoints: computed,
-            playableTileSpots: computed
+            playableTileSpots: computed,
+            gridSize: computed,
+            turnsLeft: computed
         })
         this.tilesInPlay = [JSON.parse(JSON.stringify(startTile))]
-        this.turnsLeft = 20
-        this.gridSize = [3, 3]
         this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
@@ -49,6 +47,14 @@ class Game {
 
     get playableTileSpots() {
         return this.findPlayableTileSpots()
+    }
+
+    get gridSize() {
+        return this.calculateGridSize()
+    }
+
+    get turnsLeft() {
+        return this.calculateTurnsLeft()
     }
 
     selectDrawTile(room: string, index: number) {
@@ -88,6 +94,16 @@ class Game {
             }
         })
         return points
+    }
+
+    calculateGridSize() {
+        const rowsInPlay: number[] = this.tilesInPlay.map((tile) => tile.row).sort((a, b) => a - b)
+        const columnsInPlay: number[] = this.tilesInPlay.map((tile) => tile.column).sort((a, b) => a - b)
+
+        const maxRow: number = rowsInPlay[rowsInPlay.length - 1]
+        const maxColumn: number = columnsInPlay[columnsInPlay.length - 1]
+
+        return [maxRow + 1, maxColumn + 1]
     }
 
     findPlayableTileSpots(): [number, number][] {
@@ -131,34 +147,22 @@ class Game {
             const columnsInPlay: number[] = this.tilesInPlay.map((tile) => tile.column).sort((a, b) => a - b)
 
             const minRow: number = rowsInPlay[0]
-            const maxRow: number = rowsInPlay[rowsInPlay.length - 1]
             const minColumn: number = columnsInPlay[0]
-            const maxColumn: number = columnsInPlay[columnsInPlay.length - 1]
 
-            //Do I need to create this variable below or can I just use the data directly?
             const allTilesInPlay: Tile[] = [...this.tilesInPlay, newTileInPlay]
-            let gridRows: number = this.gridSize[0]
-            let gridColumns: number = this.gridSize[1]
+
 
             if (newTileInPlay.row < minRow) {
                 allTilesInPlay.forEach(tile => {
                     tile.row++
                 })
-                gridRows++
-            } else if (newTileInPlay.row > maxRow) {
-                gridRows++
             } else if (newTileInPlay.column < minColumn) {
                 allTilesInPlay.forEach(tile => {
                     tile.column++
                 })
-                gridColumns++
-            } else if (newTileInPlay.column > maxColumn) {
-                gridColumns++
             }
 
-            this.gridSize = [gridRows, gridColumns]
             this.tilesInPlay = allTilesInPlay
-            this.turnsLeft -= 1
             this.drawTiles[this.selectedDrawTile[1]] = generateRandomRoom()
         }
     }
@@ -173,15 +177,25 @@ class Game {
         this.selectedDrawTile = ['', -1]
     }
 
+    calculateTurnsLeft() {
+        return 21 - this.tilesInPlay.length
+    }
+
     restart() {
         this.tilesInPlay = [JSON.parse(JSON.stringify(startTile))]
-        this.turnsLeft = 20
-        this.gridSize = [3, 3]
         this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
+        this.selectedDrawTile = ['', -1]
+        this.drawTileSelected = false
+        this.deckTileSelected = false
+    }
+
+    loadGame(tilesInPlay: Tile[], drawTiles: string[]) {
+        this.tilesInPlay = tilesInPlay
+        this.drawTiles = drawTiles
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
         this.deckTileSelected = false
     }
 }
 
-export { Game }
+export { Game, Tile }

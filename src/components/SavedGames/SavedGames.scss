@@ -5,6 +5,9 @@
     width: 30rem;
     background-color: $primaryColor3;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
     &__container {
         padding-bottom: 2rem;
@@ -12,7 +15,7 @@
 
     &__header-container {
         display: flex;
-        padding-bottom: 2rem;
+        padding: 0 0.5rem 1rem;
     }
 
     &__header {
@@ -34,7 +37,17 @@
     &__row {
         list-style: none;
         display: flex;
-        padding-bottom: 0.5rem;
+        padding: 0.25rem 0.5rem 0.25rem;
+        border-radius: 5px;
+        margin-bottom: 0.25rem;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &--selected {
+            background-color: gray;
+        }
     }
 
     &__item {
