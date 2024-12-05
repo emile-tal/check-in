@@ -10,6 +10,7 @@ import Modal from 'react-modal'
 import { SettingsModal } from "../../components/SettingsModal/SettingsModal"
 import axios from "axios"
 import { observer } from "mobx-react"
+import { useNavigate } from "react-router-dom"
 
 interface Props {
     game: Game
@@ -18,6 +19,9 @@ interface Props {
 const SinglePlayer = observer(function Singleplayer({ game }: Props) {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+
+    const navigate = useNavigate()
 
     Modal.setAppElement('#root')
 
@@ -47,6 +51,45 @@ const SinglePlayer = observer(function Singleplayer({ game }: Props) {
         }
     }
 
+    const gamePostPut = async (jwtToken: string) => {
+        try {
+            const { data } = await axios.get(`${baseUrl}games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            if (data.game) {
+                const gameData = {
+                    name: Date.now(),
+                    draw_0: game.drawTiles[0],
+                    draw_1: game.drawTiles[1],
+                    draw_2: game.drawTiles[2],
+                }
+                await axios.put(`${baseUrl}games/${game.id}`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                await axios.put(`${baseUrl}games/${game.id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                navigate('/home')
+                game.restart()
+            }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 404) {
+                    const gameData = {
+                        name: Date.now(),
+                        draw_0: game.drawTiles[0],
+                        draw_1: game.drawTiles[1],
+                        draw_2: game.drawTiles[2],
+                        is_singleplayer: true,
+                    }
+                    const { data } = await axios.post(`${baseUrl}games/`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                    const game_id = data.game.id
+                    await axios.put(`${baseUrl}games/${game_id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                    navigate('/home')
+                    game.restart()
+                } else {
+                    console.error(error)
+                }
+            } else {
+                console.error(error)
+            }
+        }
+    }
+
     const openSettingsModal = () => {
         setSettingsModalIsOpen(true)
     }
@@ -54,6 +97,13 @@ const SinglePlayer = observer(function Singleplayer({ game }: Props) {
     const restartGame = () => {
         game.restart()
         closeSettingsModal()
+    }
+
+    const saveGame = () => {
+        const jwtToken = localStorage.getItem('jwt_token')
+        if (jwtToken) {
+            gamePostPut(jwtToken)
+        }
     }
 
     const closeGameOverModal = () => {
@@ -75,6 +125,13 @@ const SinglePlayer = observer(function Singleplayer({ game }: Props) {
         }
     }, [game.turnsLeft])
 
+    useEffect(() => {
+        const jwtToken = localStorage.getItem('jwt_token')
+        if (jwtToken) {
+            setIsLoggedIn(true)
+        }
+    }, [])
+
     return (
         <div className="singleplayer">
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} />
@@ -83,7 +140,7 @@ const SinglePlayer = observer(function Singleplayer({ game }: Props) {
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>
             <Modal isOpen={settingsModalIsOpen} className='singleplayer__modal' overlayClassName='singleplayer__modal-overlay' onRequestClose={closeSettingsModal} >
-                <SettingsModal restartGame={restartGame} closeSettingsModal={closeSettingsModal} />
+                <SettingsModal restartGame={restartGame} saveGame={saveGame} closeSettingsModal={closeSettingsModal} isLoggedIn={isLoggedIn} />
             </Modal>
         </div>
     )

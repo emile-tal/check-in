@@ -25,6 +25,7 @@ class Game {
     selectedDrawTile: [string, number]
     drawTileSelected: boolean
     deckTileSelected: boolean
+    id: number
 
 
     constructor() {
@@ -39,6 +40,7 @@ class Game {
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
         this.deckTileSelected = false
+        this.id = 0
     }
 
     get totalPoints() {
@@ -187,14 +189,16 @@ class Game {
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
         this.deckTileSelected = false
+        this.id = 0
     }
 
-    loadGame(tilesInPlay: Tile[], drawTiles: string[]) {
+    loadGame(tilesInPlay: Tile[], drawTiles: string[], gameId: number) {
         this.tilesInPlay = tilesInPlay
         this.drawTiles = drawTiles
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
         this.deckTileSelected = false
+        this.id = gameId
     }
 }
 

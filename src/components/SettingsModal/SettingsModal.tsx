@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom'
 
 interface Props {
     restartGame: () => void
+    saveGame: () => void
     closeSettingsModal: () => void
+    isLoggedIn: boolean
 }
 
-export function SettingsModal({ restartGame, closeSettingsModal }: Props) {
+export function SettingsModal({ restartGame, saveGame, closeSettingsModal, isLoggedIn }: Props) {
     const navigate = useNavigate()
 
     const goToHome = () => {
@@ -17,7 +19,7 @@ export function SettingsModal({ restartGame, closeSettingsModal }: Props) {
 
     return (
         <div className='settings-modal'>
-            <Button style='primary' text='SAVE' />
+            <Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='SAVE' onClick={saveGame} />
             <Button style='primary' text='RESTART' onClick={restartGame} />
             <Button style='primary' text='MAIN MENU' onClick={goToHome} />
             <Button style='primary' text='RETURN TO GAME' onClick={closeSettingsModal} />

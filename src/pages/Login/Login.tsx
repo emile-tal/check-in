@@ -17,7 +17,12 @@ export function Login({ login, isLoggedIn }: Props) {
 
     return (
         <div className='login'>
-            <LoginForm login={login} />
+            {isLoggedIn ? (
+                <span>LOADING...</span>
+            ) : (
+                <LoginForm login={login} />
+            )
+            }
         </div>
     )
 }

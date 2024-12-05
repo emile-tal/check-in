@@ -81,7 +81,7 @@ export function SavedGames({ game }: Props) {
             if (loadingGame.is_singleplayer) {
                 const drawTiles = [loadingGame.draw_0, loadingGame.draw_1, loadingGame.draw_2]
                 const tilesInPlay = loadingGameTiles.map(({ room, row, column }) => ({ room, row, column }))
-                game.loadGame(tilesInPlay, drawTiles)
+                game.loadGame(tilesInPlay, drawTiles, loadingGame.id)
                 navigate('/play')
             }
         }
@@ -99,9 +99,8 @@ export function SavedGames({ game }: Props) {
         }
     }
 
-    const formatDate = (date: string): string => {
-        const timestamp: Date = new Date(date)
-        return timestamp.toLocaleDateString()
+    const formatDate = (date: string): Date => {
+        return new Date(date)
     }
 
     return (
@@ -114,10 +113,10 @@ export function SavedGames({ game }: Props) {
                             <h2 className='saved-games__header--date'>Last played</h2>
                             <h2 className='saved-games__header--type'>Type</h2>
                         </div>
-                        {allGames.map((game) => (
+                        {allGames.sort((a, b) => formatDate(b.updated_at).getTime() - formatDate(a.updated_at).getTime()).map((game) => (
                             <ul className={`saved-games__row ${selectedGame === game.id ? 'saved-games__row--selected' : ''}`} key={game.id} onClick={() => toggleSelectedGame(game.id)}>
                                 <li className='saved-games__item--game'>{game.name}</li>
-                                <li className='saved-games__item--date'>{formatDate(game.updated_at)}</li>
+                                <li className='saved-games__item--date'>{formatDate(game.updated_at).toLocaleDateString()}</li>
                                 <li className='saved-games__item--type'>{game.is_singleplayer ? 'Singleplayer' : 'Multiplayer'}</li>
                             </ul>
                         ))}
