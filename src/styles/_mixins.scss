@@ -29,3 +29,22 @@
     background-blend-mode: overlay;
     background-size: cover;
 }
+
+@mixin main-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    height: 100vh;
+    width: 100vw;
+}
+
+@mixin main-menu-button-container {
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}

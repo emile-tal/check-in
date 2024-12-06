@@ -1,10 +1,14 @@
 @use '../../styles/mixins.scss' as *;
 
-.home {
+.play {
     @include main-menu;
     @include page-background;
 
     &__button-container {
         @include main-menu-button-container;
+    }
+
+    &__link {
+        width: 100%;
     }
 }

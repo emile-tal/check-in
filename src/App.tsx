@@ -7,7 +7,8 @@ import { Game } from './Game'
 import { Homepage } from './pages/Homepage/Homepage'
 import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
 import { Login } from './pages/Login/Login'
-import Singleplayer from './pages/Singleplayer/Singleplayer'
+import { Play } from './pages/Play/Play'
+import PlayGame from './pages/PlayGame/PlayGame'
 import { Stats } from './pages/Stats/Stats'
 import axios from 'axios'
 
@@ -57,8 +58,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
-        <Route path='/home' element={<Homepage user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
-        <Route path='/play' element={<Singleplayer game={game} />} />
+        <Route path='/home' element={<Homepage game={game} user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
+        <Route path='/play' element={<Play game={game} isLoggedIn={isLoggedIn} />} />
+        <Route path='/play-game' element={<PlayGame game={game} />} />
         <Route path='/stats' element={<Stats />} />
         <Route path='/saved' element={<LoadGamePage game={game} />} />
       </Routes>

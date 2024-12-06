@@ -1,7 +1,7 @@
 @use '../../styles/mixins' as *;
 @use '../../styles/variables' as *;
 
-.singleplayer {
+.play-game {
     min-height: 100vh;
     min-width: 100vw;
     @include page-background;

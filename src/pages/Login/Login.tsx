@@ -1,7 +1,7 @@
 import './Login.scss'
 
 import { LoginForm } from '../../components/LoginForm/LoginForm'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 interface Props {
     login: (jwtToken: string) => void
@@ -9,10 +9,9 @@ interface Props {
 }
 
 export function Login({ login, isLoggedIn }: Props) {
-    const navigate = useNavigate()
 
     if (isLoggedIn) {
-        navigate('/home')
+        return <Navigate to='/home' />
     }
 
     return (

@@ -39,7 +39,12 @@ export function SavedGames({ game }: Props) {
     const fetchGames = async (jwtToken: string) => {
         try {
             const { data } = await axios.get(`${baseUrl}games`, { headers: { Authorization: `Bearer ${jwtToken}` } })
-            setAllGames(data.games)
+            const games: SavedGame[] = data.games
+            if (game.numberOfPlayers === 1) {
+                setAllGames(games.filter((game) => game.is_singleplayer === true))
+            } else {
+                setAllGames(games.filter((game) => game.is_singleplayer !== true))
+            }
         } catch (error) {
             console.error(error)
         }

@@ -1,4 +1,4 @@
-import "./Singleplayer.scss"
+import "./PlayGame.scss"
 
 import { useEffect, useState } from "react"
 
@@ -16,7 +16,7 @@ interface Props {
     game: Game
 }
 
-const SinglePlayer = observer(function Singleplayer({ game }: Props) {
+const PlayGame = observer(function PlayGame({ game }: Props) {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -133,17 +133,17 @@ const SinglePlayer = observer(function Singleplayer({ game }: Props) {
     }, [])
 
     return (
-        <div className="singleplayer">
+        <div className="play-game">
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} />
             <GameContainer game={game} />
-            <Modal isOpen={gameOverModalIsOpen} className='singleplayer__modal' overlayClassName='singleplayer__modal-overlay'>
+            <Modal isOpen={gameOverModalIsOpen} className='play-game__modal' overlayClassName='play-game__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>
-            <Modal isOpen={settingsModalIsOpen} className='singleplayer__modal' overlayClassName='singleplayer__modal-overlay' onRequestClose={closeSettingsModal} >
+            <Modal isOpen={settingsModalIsOpen} className='play-game__modal' overlayClassName='play-game__modal-overlay' onRequestClose={closeSettingsModal} >
                 <SettingsModal restartGame={restartGame} saveGame={saveGame} closeSettingsModal={closeSettingsModal} isLoggedIn={isLoggedIn} />
             </Modal>
         </div>
     )
 })
 
-export default SinglePlayer
+export default PlayGame
