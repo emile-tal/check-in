@@ -20,6 +20,7 @@ const generateRandomRoom = (): string => {
 }
 
 class Game {
+    user_id: number
     tilesInPlay: Tile[]
     drawTiles: string[]
     selectedDrawTile: [string, number]
@@ -35,6 +36,7 @@ class Game {
             gridSize: computed,
             turnsLeft: computed
         })
+        this.user_id = 0
         this.tilesInPlay = [JSON.parse(JSON.stringify(startTile))]
         this.drawTiles = [generateRandomRoom(), generateRandomRoom(), generateRandomRoom()]
         this.selectedDrawTile = ['', -1]
@@ -58,6 +60,10 @@ class Game {
 
     get turnsLeft() {
         return this.calculateTurnsLeft()
+    }
+
+    setUser(user_id: number) {
+        this.user_id = user_id
     }
 
     selectDrawTile(room: string, index: number) {

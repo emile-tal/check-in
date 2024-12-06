@@ -9,9 +9,10 @@ import { Game } from "../../Game"
 interface Props {
     game: Game
     isLoggedIn: boolean
+    user_id: number
 }
 
-export function Play({ game, isLoggedIn }: Props) {
+export function Play({ game, isLoggedIn, user_id }: Props) {
     const [isMultiplayer, setIsMultiplayer] = useState(false)
 
     const navigate = useNavigate()
@@ -23,7 +24,8 @@ export function Play({ game, isLoggedIn }: Props) {
     }, [])
 
     const newMultiplayerGame = () => {
-        navigate('/play-game')
+        game.setUser(user_id)
+        navigate('/find-game')
     }
 
     const newSingleplayerGame = () => {
@@ -38,7 +40,7 @@ export function Play({ game, isLoggedIn }: Props) {
         <div className='play'>
             <div className='play__button-container'>
                 <Button style='primary' text='NEW GAME' onClick={isMultiplayer ? newMultiplayerGame : newSingleplayerGame} />
-                {isMultiplayer ? <Button style='primary' text='FIND GAME' /> : ''}
+                {isMultiplayer ? <Button style='primary' text='FIND GAME' onClick={() => navigate('/find-game')} /> : ''}
                 <Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' onClick={goToSavedGames} />
                 <Link to='/home' className='play__link'><Button style='primary' text='BACK TO MENU' /></Link>
             </div>

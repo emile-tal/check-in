@@ -3,6 +3,7 @@ import './App.scss'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
+import { FindMultiplayer } from './pages/FindMultiplayer/FindMultiplayer'
 import { Game } from './Game'
 import { Homepage } from './pages/Homepage/Homepage'
 import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
@@ -16,7 +17,8 @@ interface User {
   username: string
   id: number
 }
-const game = new Game()
+
+const game = new Game
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -59,10 +61,11 @@ function App() {
       <Routes>
         <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
         <Route path='/home' element={<Homepage game={game} user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
-        <Route path='/play' element={<Play game={game} isLoggedIn={isLoggedIn} />} />
+        <Route path='/play' element={<Play game={game} isLoggedIn={isLoggedIn} user_id={user.id} />} />
         <Route path='/play-game' element={<PlayGame game={game} />} />
         <Route path='/stats' element={<Stats />} />
         <Route path='/saved' element={<LoadGamePage game={game} />} />
+        <Route path='/find-game' element={<FindMultiplayer game={game} user_id={user.id} />} />
       </Routes>
     </BrowserRouter>
   )
