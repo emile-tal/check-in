@@ -1,19 +1,46 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .game-header {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem $margin-mobile;
     position: fixed;
     top: 0;
-    overflow: hidden;
     z-index: 1;
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem $margin-mobile;
+
+        @include tablet {
+            margin: 1.5rem $margin-tablet-desktop;
+        }
+
+        @include desktop {
+            width: $desktop-container-width;
+            margin: 1.5rem auto;
+        }
+    }
 
     &__stats-container {
         display: flex;
         gap: 2rem;
-        font-size: 1.25rem;
+        font-size: 1rem;
+
+        @include tablet {
+            font-size: 1.5rem;
+        }
+
+        &--multiplayer {
+            flex-direction: column;
+            gap: 0.25rem;
+
+            @include tablet {
+                flex-direction: row;
+                gap: 2rem;
+            }
+        }
     }
 }

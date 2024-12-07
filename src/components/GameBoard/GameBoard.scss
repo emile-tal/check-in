@@ -1,17 +1,20 @@
+@use '../../styles/mixins' as *;
+
 .gameboard {
     height: 17.5rem;
     width: 100%;
     padding: 1rem;
     border: 2px black solid;
     overflow: scroll;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
     background-image: url('../../assets/game-background.png');
     background-color: rgba(255, 255, 255, 0.4);
     background-position: center;
     background-blend-mode: overlay;
     background-size: cover;
+
+    @include tablet {
+        height: 25rem;
+    }
 
     &__game {
         display: grid;

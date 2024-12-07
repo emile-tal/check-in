@@ -66,8 +66,8 @@ function App() {
         <Route path='/home' element={<Homepage game={game} user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
         <Route path='/play-singleplayer' element={<PlaySingleplayer />} />
         <Route path='/play-multiplayer' element={<PlayMultiplayer />} />
-        <Route path='/singleplayer' element={<GameSingleplayer game={game} />} />
-        <Route path='/multiplayer' element={<GameMultiplayer game={game} />} />
+        <Route path='/singleplayer' element={<GameSingleplayer game={game} userId={user.id} />} />
+        <Route path='/multiplayer' element={<GameMultiplayer game={game} userId={user.id} />} />
         <Route path='/stats' element={<Stats />} />
         <Route path='/saved' element={<LoadGamePage game={game} />} />
         <Route path='/find-game' element={<FindMultiplayer game={game} userId={user.id} />} />

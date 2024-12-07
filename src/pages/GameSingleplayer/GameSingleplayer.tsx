@@ -5,10 +5,11 @@ import GameLayout from '../../components/GameLayout/GameLayout'
 
 interface Props {
     game: Game
+    userId: number
 }
 
-export function GameSingleplayer({ game }: Props) {
+export function GameSingleplayer({ game, userId }: Props) {
     return (
-        <GameLayout isSingleplayer={true} game={game} />
+        <GameLayout isSingleplayer={true} game={game} userId={userId} />
     )
 }

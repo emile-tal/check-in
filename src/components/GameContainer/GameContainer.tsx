@@ -11,7 +11,7 @@ import { socket } from '../../socket'
 interface Props {
     game: Game
     isSingleplayer: boolean
-    userId?: number
+    userId: number
     updateOpponentDetails: (opponentPoints: number, opponentTurns: number) => void
 }
 
@@ -25,6 +25,8 @@ export function GameContainer({ game, userId, isSingleplayer, updateOpponentDeta
         if (!isSingleplayer) {
             if (game.user_id !== userId) {
                 setIsUserTurn(false)
+                console.log(game.user_id)
+                console.log(userId)
             }
         }
         const handleResize = () => {
@@ -53,23 +55,29 @@ export function GameContainer({ game, userId, isSingleplayer, updateOpponentDeta
     }
 
     return (
-        <div className='game'>
+        <div className={`game ${isSingleplayer ? '' : 'game--multiplayer'}`}>
             <Draw game={game} isMobile={isMobile} isUserTurn={isUserTurn} />
             <div className='game__container'>
-                {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'OPPONENTS TURN'}</h3>}
+                <div className='game__board-header'>
+                    {isSingleplayer ? '' : <h3>YOU</h3>}
+                    {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'THEIR TURN'}</h3>}
+                </div>
                 <div className='game__all-games'>
-                    <GameBoard game={game} isMobile={isMobile} playTurn={playTurn} />
+                    <GameBoard game={game} isMobile={isMobile} playTurn={playTurn} isUserTurn={isUserTurn} />
                     {isSingleplayer ? '' : (
-                        <div className='game__opponent'>
-                            <div className='gameboard__game'
-                                style={{
-                                    gridTemplateColumns: `repeat(${opponentGridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
-                                    gridTemplateRows: `repeat(${opponentGridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
-                                }}
-                            >
-                                {opponentTilesInPlay.map((tile, index) => (
-                                    <GameTile key={index} tile={tile} />
-                                ))}
+                        <div className='game__opponent-container'>
+                            <h3>OPPONENT</h3>
+                            <div className={`game__opponent ${isUserTurn ? '' : 'game__opponent--turn'}`}>
+                                <div className='gameboard__game'
+                                    style={{
+                                        gridTemplateColumns: `repeat(${opponentGridSize[1]}, ${isMobile ? '5rem' : '6rem'})`,
+                                        gridTemplateRows: `repeat(${opponentGridSize[0]}, ${isMobile ? '5rem' : '6rem'})`,
+                                    }}
+                                >
+                                    {opponentTilesInPlay.map((tile, index) => (
+                                        <GameTile key={index} tile={tile} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}

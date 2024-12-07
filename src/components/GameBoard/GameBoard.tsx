@@ -9,16 +9,17 @@ interface Props {
     game: Game
     isMobile: boolean
     playTurn: (tile: Tile) => void
+    isUserTurn: boolean
 }
 
-const GameBoard = observer(function GameBoard({ game, isMobile, playTurn }: Props) {
+const GameBoard = observer(function GameBoard({ game, isMobile, playTurn, isUserTurn }: Props) {
 
     return (
-        <div className='gameboard'>
+        <div className={`gameboard ${isUserTurn ? 'gameboard--selected' : ''}`}>
             <div className='gameboard__game'
                 style={{
-                    gridTemplateColumns: `repeat(${game.gridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
-                    gridTemplateRows: `repeat(${game.gridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
+                    gridTemplateColumns: `repeat(${game.gridSize[1]}, ${isMobile ? '5rem' : '6rem'})`,
+                    gridTemplateRows: `repeat(${game.gridSize[0]}, ${isMobile ? '5rem' : '6rem'})`,
                 }}
             >
                 {game.tilesInPlay && game.playableTileSpots.map((coordinates, index) => (

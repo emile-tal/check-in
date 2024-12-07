@@ -70,6 +70,7 @@ export function FindPlayersDisplay({ game, isHostingGame, userId }: Props) {
                     is_singleplayer: 0
                 }
                 createMultiplayerGame(jwtToken, gameObject)
+                game.setUser(userId)
             }
         } else {
             if (jwtToken) {

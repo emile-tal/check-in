@@ -15,9 +15,10 @@ import { useNavigate } from "react-router-dom"
 interface Props {
     game: Game
     isSingleplayer: boolean
+    userId: number
 }
 
-const GameLayout = observer(function GameLayout({ game, isSingleplayer }: Props) {
+const GameLayout = observer(function GameLayout({ game, isSingleplayer, userId }: Props) {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -159,7 +160,7 @@ const GameLayout = observer(function GameLayout({ game, isSingleplayer }: Props)
     return (
         <div className="game-layout">
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
-            <GameContainer game={game} isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} />
+            <GameContainer game={game} isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} userId={userId} />
             <Modal isOpen={gameOverModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>

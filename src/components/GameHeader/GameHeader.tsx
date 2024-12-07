@@ -13,12 +13,14 @@ interface Props {
 export function GameHeader({ totalPoints, turnsLeft, openSettingsModal, isSingleplayer, opponentPoints }: Props) {
     return (
         <header className='game-header'>
-            <div className='game-header__stats-container'>
-                <span className='game-header__stats'>{`Total points: ${totalPoints}`}</span>
-                <span className='game-header__stats'>{`Turns left: ${turnsLeft}`}</span>
-                {isSingleplayer ? '' : <span className='game-header__stats'>{`Opponent points: ${opponentPoints}`}</span>}
+            <div className='game-header__container'>
+                <div className={`game-header__stats-container ${isSingleplayer ? '' : 'game-header__stats-container--multiplayer'}`}>
+                    <span className='game-header__stats'>{`Total points: ${totalPoints}`}</span>
+                    <span className='game-header__stats'>{`Turns left: ${turnsLeft}`}</span>
+                    {isSingleplayer ? '' : <span className='game-header__stats'>{`Opponent points: ${opponentPoints}`}</span>}
+                </div>
+                <SettingsIcon openSettingsModal={openSettingsModal} />
             </div>
-            <SettingsIcon openSettingsModal={openSettingsModal} />
         </header>
     )
 }

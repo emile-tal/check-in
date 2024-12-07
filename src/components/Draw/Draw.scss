@@ -2,22 +2,29 @@
 @use '../../styles/mixins' as *;
 
 .draw {
-    &__draw-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        width: 17.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
 
-        @include tablet {
-            width: 35.5rem;
-            justify-content: center;
-        }
+    @include tablet {
+        width: 6rem;
+        gap: 1rem;
+        justify-content: flex-start;
+        margin-top: 1.25rem;
+        align-self: flex-start;
     }
 
     &__deck-container {
         display: flex;
         gap: 6rem;
-        position: relative
+        position: relative;
+
+        @include tablet {
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 7rem;
+        }
     }
 
     &__draw-pile {
@@ -38,8 +45,8 @@
         left: 5.5rem;
 
         @include tablet {
-            position: relative;
-            bottom: 0;
+            left: 0;
+            top: 7rem;
         }
     }
 
@@ -50,6 +57,8 @@
         align-items: flex-start;
 
         @include tablet {
+            flex-wrap: nowrap;
+            flex-direction: column;
             gap: 1rem;
         }
     }
@@ -57,7 +66,11 @@
     &__lobby-draw {
         @include tile;
 
-        @include tablet {}
+        @include tablet {
+            position: absolute;
+            top: 35rem;
+            left: 0;
+        }
 
         &--selected {
             box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;

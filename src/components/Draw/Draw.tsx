@@ -32,7 +32,7 @@ const Draw = observer(function Draw({ game, isMobile, isUserTurn }: Props) {
         if (isMobile) {
             await animateDrawCard(drawCardTarget.current, { x: '5.5rem' }, { duration: 0.25 })
         } else {
-            await animateDrawCard(drawCardTarget.current, { x: '19.5rem' }, { duration: 0.25 })
+            await animateDrawCard(drawCardTarget.current, { y: '7rem' }, { duration: 0.25 })
         }
         await animateDrawCard(drawCardTarget.current, { scaleX: 0 }, { duration: 0.1 })
         await animateDrawnCard(drawnCardTarget.current, { scaleX: 1 }, { duration: 0.1 })
@@ -44,8 +44,8 @@ const Draw = observer(function Draw({ game, isMobile, isUserTurn }: Props) {
         let xOffset = (index) * 5.5
         let yOffset = 6.5
         if (!isMobile) {
-            xOffset = (index + 1) * 8.5 + 2.5
-            yOffset = 9.5
+            xOffset = 0
+            yOffset = (index + 2) * 7
         }
         await animateOpenTile(openTileTarget.current, { scaleX: 0 }, { duration: 0 })
         await animateDrawCard(drawCardTarget.current, { x: `${xOffset}rem`, y: `${yOffset}rem` }, { duration: 0.25 })
@@ -80,7 +80,7 @@ const Draw = observer(function Draw({ game, isMobile, isUserTurn }: Props) {
     }, [game.turnsLeft])
 
     return (
-        <div className='draw__draw-container'>
+        <div className='draw'>
             <div className='draw__deck-container'>
                 <img src={deck} className='draw__draw-pile' onClick={drawFromDeck} />
                 {game.drawTileSelected && <img src={deck} className='draw__draw-card' ref={drawCardTarget} />}
