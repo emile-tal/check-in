@@ -17,9 +17,10 @@ import restaurant from '../../assets/restaurant.png'
 interface Props {
     game: Game
     isMobile: boolean
+    isUserTurn: boolean
 }
 
-const Draw = observer(function Draw({ game, isMobile }: Props) {
+const Draw = observer(function Draw({ game, isMobile, isUserTurn }: Props) {
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
     const openCardRefs = useRef<[React.RefObject<HTMLElement>, any][]>([])
@@ -50,7 +51,7 @@ const Draw = observer(function Draw({ game, isMobile }: Props) {
     }
 
     const selectDrawTile = (tile: string, index: number) => {
-        if (!game.deckTileSelected) {
+        if (!game.deckTileSelected && isUserTurn) {
             if (game.selectedDrawTile[0] === tile && (tile === 'lobby' || game.selectedDrawTile[1] === index)) {
                 game.deselectDrawTile()
             } else {
@@ -60,7 +61,7 @@ const Draw = observer(function Draw({ game, isMobile }: Props) {
     }
 
     const drawFromDeck = () => {
-        if (!game.drawTileSelected) {
+        if (!game.drawTileSelected && isUserTurn) {
             game.drawFromDeck()
             setTimeout(drawCardAnimation, 0.1)
         }

@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 
 import { FindMultiplayer } from './pages/FindMultiplayer/FindMultiplayer'
 import { Game } from './Game'
-import GameMultiplayer from './pages/GameMultiplayer/GameMultiplayer'
-import GameSingleplayer from './pages/GameSingleplayer/GameSingleplayer'
+import { GameMultiplayer } from './pages/GameMultiplayer/GameMultiplayer'
+import { GameSingleplayer } from './pages/GameSingleplayer/GameSingleplayer'
 import { Homepage } from './pages/Homepage/Homepage'
 import { HostMultiplayer } from './pages/HostMultiplayer/HostMultiplayer'
 import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
@@ -67,7 +67,7 @@ function App() {
         <Route path='/play-singleplayer' element={<PlaySingleplayer />} />
         <Route path='/play-multiplayer' element={<PlayMultiplayer />} />
         <Route path='/singleplayer' element={<GameSingleplayer game={game} />} />
-        <Route path='/multiplayer' element={<GameMultiplayer game={game} userId={user.id} />} />
+        <Route path='/multiplayer' element={<GameMultiplayer game={game} />} />
         <Route path='/stats' element={<Stats />} />
         <Route path='/saved' element={<LoadGamePage game={game} />} />
         <Route path='/find-game' element={<FindMultiplayer game={game} userId={user.id} />} />
