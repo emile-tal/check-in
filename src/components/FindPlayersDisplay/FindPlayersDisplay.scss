@@ -1,0 +1,36 @@
+@use '../../styles/variables' as *;
+
+.find-players {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    width: 20rem;
+    background-color: $primaryColor3;
+
+    &__header {
+        padding: 0 0.5rem;
+    }
+
+    &__games-container {
+        padding: 1rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+        border-radius: 10px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &--selected {
+            background-color: gray;
+        }
+    }
+}

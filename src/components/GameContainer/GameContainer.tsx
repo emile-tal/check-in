@@ -8,9 +8,10 @@ import GameBoard from '../GameBoard/GameBoard'
 
 interface Props {
     game: Game
+    userId?: number
 }
 
-export function GameContainer({ game }: Props) {
+export function GameContainer({ game, userId }: Props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export function GameContainer({ game }: Props) {
     return (
         <div className='game'>
             <Draw game={game} isMobile={isMobile} />
-            <GameBoard game={game} isMobile={isMobile} />
+            <GameBoard game={game} isMobile={isMobile} userId={userId} />
         </div>
 
     )

@@ -86,10 +86,12 @@ export function LoginForm({ login }: Props) {
             if (!userData.email) {
                 emptyFieldTracker.push('email')
             }
-        }
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
-            setInvalidEmail(true)
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailPattern.test(email)) {
+                setInvalidEmail(false)
+            } else {
+                setInvalidEmail(true)
+            }
         }
         setEmptyFields(emptyFieldTracker)
         if (emptyFieldTracker.length === 0 && !invalidEmail) {

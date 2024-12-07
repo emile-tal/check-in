@@ -211,6 +211,14 @@ class Game {
     setPlayers(numberOfPlayers: number) {
         this.numberOfPlayers = numberOfPlayers
     }
+
+    joinGame(gameId: number) {
+        this.id = gameId
+    }
+
+    setDrawTiles(drawTiles: string[]) {
+        this.drawTiles = drawTiles
+    }
 }
 
-export { Game, Tile }
+export { Game, Tile, startTile }

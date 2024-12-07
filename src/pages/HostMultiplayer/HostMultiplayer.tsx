@@ -1,4 +1,4 @@
-import './FindMultiplayer.scss'
+import './HostMultiplayer.scss'
 
 import { FindPlayersDisplay } from '../../components/FindPlayersDisplay/FindPlayerDisplay'
 import { Game } from '../../Game'
@@ -8,10 +8,10 @@ interface Props {
     userId: number
 }
 
-export function FindMultiplayer({ game, userId }: Props) {
+export function HostMultiplayer({ game, userId }: Props) {
     return (
         <div className='find-multiplayer'>
-            <FindPlayersDisplay game={game} isHostingGame={false} userId={userId} />
+            <FindPlayersDisplay game={game} isHostingGame={true} userId={userId} />
         </div>
     )
 }

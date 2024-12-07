@@ -1,9 +1,10 @@
 import './Homepage.scss'
 
+import { Link, useNavigate } from 'react-router-dom'
+
 import { Button } from '../../components/Button/Button'
 import { Game } from '../../Game'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 interface Props {
     game: Game
@@ -13,7 +14,7 @@ interface Props {
     logout: () => void
 }
 
-export function Homepage({ game, user, isLoggedIn, login, logout }: Props) {
+export function Homepage({ user, isLoggedIn, login, logout }: Props) {
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -30,31 +31,17 @@ export function Homepage({ game, user, isLoggedIn, login, logout }: Props) {
         navigate('/')
     }
 
-    const goToStats = () => {
-        navigate('/stats')
-    }
-
     const goToLogin = () => {
         navigate('/')
-    }
-
-    const goToSingleplayer = () => {
-        game.setPlayers(1)
-        navigate('/play')
-    }
-
-    const goToMultiplayer = () => {
-        game.setPlayers(2)
-        navigate('/play')
     }
 
     return (
         <div className='home'>
             <h1 className='home__logo'>{`Welcome ${isLoggedIn ? user.username : 'Guest'}`}</h1>
             <div className='home__button-container'>
-                <Button text='SINGLEPLAYER' style='primary' onClick={goToSingleplayer} />
-                <Button text='MULTIPLAYER' style={isLoggedIn ? 'primary' : 'primary-unclickable'} onClick={goToMultiplayer} />
-                <Button text='STATS' style={isLoggedIn ? 'primary' : 'primary-unclickable'} onClick={goToStats} />
+                <Link to='/play-singleplayer' className='home__link'><Button text='SINGLEPLAYER' style='primary' /></Link>
+                <Link to='/play-multiplayer' className='home__link'><Button text='MULTIPLAYER' style={isLoggedIn ? 'primary' : 'primary-unclickable'} /></Link>
+                <Link to='/stats' className='home__link'><Button text='STATS' style={isLoggedIn ? 'primary' : 'primary-unclickable'} /></Link>
                 <Button text={isLoggedIn ? 'LOG OUT' : "LOG IN"} style='primary' onClick={isLoggedIn ? handleLogout : goToLogin} />
             </div>
         </div>

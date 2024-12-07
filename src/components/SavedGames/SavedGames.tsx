@@ -19,7 +19,7 @@ export function SavedGames({ game }: Props) {
         id: number
         name: string
         updated_at: string
-        is_singleplayer: boolean
+        is_singleplayer: number
     }
 
     interface LoadingGame {
@@ -27,7 +27,7 @@ export function SavedGames({ game }: Props) {
         draw_0: string
         draw_1: string
         draw_2: string
-        is_singleplayer: boolean
+        is_singleplayer: number
     }
 
     const [allGames, setAllGames] = useState<SavedGame[]>([])
@@ -41,9 +41,9 @@ export function SavedGames({ game }: Props) {
             const { data } = await axios.get(`${baseUrl}games`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             const games: SavedGame[] = data.games
             if (game.numberOfPlayers === 1) {
-                setAllGames(games.filter((game) => game.is_singleplayer === true))
+                setAllGames(games.filter((game) => game.is_singleplayer === 1))
             } else {
-                setAllGames(games.filter((game) => game.is_singleplayer !== true))
+                setAllGames(games.filter((game) => game.is_singleplayer !== 1))
             }
         } catch (error) {
             console.error(error)

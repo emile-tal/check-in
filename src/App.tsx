@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react'
 
 import { FindMultiplayer } from './pages/FindMultiplayer/FindMultiplayer'
 import { Game } from './Game'
+import GameMultiplayer from './pages/GameMultiplayer/GameMultiplayer'
+import GameSingleplayer from './pages/GameSingleplayer/GameSingleplayer'
 import { Homepage } from './pages/Homepage/Homepage'
+import { HostMultiplayer } from './pages/HostMultiplayer/HostMultiplayer'
 import { LoadGamePage } from './pages/LoadGamePage/LoadGamePage'
 import { Login } from './pages/Login/Login'
-import { Play } from './pages/Play/Play'
-import PlayGame from './pages/PlayGame/PlayGame'
+import { PlayMultiplayer } from './pages/PlayMultiplayer/PlayMultiplayer'
+import { PlaySingleplayer } from './pages/PlaySingleplayer/PlaySingleplayer'
 import { Stats } from './pages/Stats/Stats'
 import axios from 'axios'
 
@@ -61,11 +64,14 @@ function App() {
       <Routes>
         <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
         <Route path='/home' element={<Homepage game={game} user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
-        <Route path='/play' element={<Play game={game} isLoggedIn={isLoggedIn} user_id={user.id} />} />
-        <Route path='/play-game' element={<PlayGame game={game} />} />
+        <Route path='/play-singleplayer' element={<PlaySingleplayer />} />
+        <Route path='/play-multiplayer' element={<PlayMultiplayer />} />
+        <Route path='/singleplayer' element={<GameSingleplayer game={game} />} />
+        <Route path='/multiplayer' element={<GameMultiplayer game={game} userId={user.id} />} />
         <Route path='/stats' element={<Stats />} />
         <Route path='/saved' element={<LoadGamePage game={game} />} />
-        <Route path='/find-game' element={<FindMultiplayer game={game} user_id={user.id} />} />
+        <Route path='/find-game' element={<FindMultiplayer game={game} userId={user.id} />} />
+        <Route path='/host-game' element={<HostMultiplayer game={game} userId={user.id} />} />
       </Routes>
     </BrowserRouter>
   )

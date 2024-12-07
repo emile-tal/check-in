@@ -1,4 +1,4 @@
-import "./PlayGame.scss"
+import "./GameSingleplayer.scss"
 
 import { useEffect, useState } from "react"
 
@@ -16,7 +16,7 @@ interface Props {
     game: Game
 }
 
-const PlayGame = observer(function PlayGame({ game }: Props) {
+const GameSingleplayer = observer(function GameSingleplayer({ game }: Props) {
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -146,4 +146,4 @@ const PlayGame = observer(function PlayGame({ game }: Props) {
     )
 })
 
-export default PlayGame
+export default GameSingleplayer

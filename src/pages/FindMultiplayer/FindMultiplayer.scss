@@ -1,0 +1,10 @@
+@use '../../styles/mixins' as *;
+
+.find-multiplayer {
+    min-height: 100vh;
+    min-width: 100vw;
+    @include page-background;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
