@@ -54,25 +54,27 @@ export function GameContainer({ game, userId, isSingleplayer, updateOpponentDeta
 
     return (
         <div className='game'>
-            {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'OPPONENTS TURN'}</h3>}
-            <div className='game__all-games'>
-                <GameBoard game={game} isMobile={isMobile} playTurn={playTurn} />
-                {isSingleplayer ? '' : (
-                    <div className='game__opponent'>
-                        <div className='gameboard__game'
-                            style={{
-                                gridTemplateColumns: `repeat(${opponentGridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
-                                gridTemplateRows: `repeat(${opponentGridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
-                            }}
-                        >
-                            {opponentTilesInPlay.map((tile, index) => (
-                                <GameTile key={index} tile={tile} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
             <Draw game={game} isMobile={isMobile} isUserTurn={isUserTurn} />
+            <div className='game__container'>
+                {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'OPPONENTS TURN'}</h3>}
+                <div className='game__all-games'>
+                    <GameBoard game={game} isMobile={isMobile} playTurn={playTurn} />
+                    {isSingleplayer ? '' : (
+                        <div className='game__opponent'>
+                            <div className='gameboard__game'
+                                style={{
+                                    gridTemplateColumns: `repeat(${opponentGridSize[1]}, ${isMobile ? '5rem' : '7.5rem'})`,
+                                    gridTemplateRows: `repeat(${opponentGridSize[0]}, ${isMobile ? '5rem' : '7.5rem'})`,
+                                }}
+                            >
+                                {opponentTilesInPlay.map((tile, index) => (
+                                    <GameTile key={index} tile={tile} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
 
     )

@@ -160,10 +160,10 @@ const GameLayout = observer(function GameLayout({ game, isSingleplayer }: Props)
         <div className="game-layout">
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
             <GameContainer game={game} isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} />
-            <Modal isOpen={gameOverModalIsOpen} className='play-game__modal' overlayClassName='play-game__modal-overlay'>
+            <Modal isOpen={gameOverModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>
-            <Modal isOpen={settingsModalIsOpen} className='play-game__modal' overlayClassName='play-game__modal-overlay' onRequestClose={closeSettingsModal} >
+            <Modal isOpen={settingsModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay' onRequestClose={closeSettingsModal} >
                 <SettingsModal restartGame={restartGame} saveGame={saveGame} closeSettingsModal={closeSettingsModal} isLoggedIn={isLoggedIn} />
             </Modal>
         </div>

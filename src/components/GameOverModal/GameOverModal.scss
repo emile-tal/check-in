@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .game-over-modal {
     display: flex;
@@ -6,7 +7,11 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    width: 80%;
+    width: 90%;
+
+    @include tablet {
+        width: 80%;
+    }
 
     &__title {
         font-size: 3rem;
