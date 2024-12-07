@@ -1,7 +1,7 @@
 import './App.scss'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 import { FindMultiplayer } from './pages/FindMultiplayer/FindMultiplayer'
 import { Game } from './Game'
@@ -22,6 +22,9 @@ interface User {
 }
 
 const game = new Game
+
+export const CurrentUserContext = createContext<User>({ username: '', id: 0 })
+export const GameContext = createContext<Game>(game)
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -61,18 +64,22 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
-        <Route path='/home' element={<Homepage game={game} user={user} isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
-        <Route path='/play-singleplayer' element={<PlaySingleplayer />} />
-        <Route path='/play-multiplayer' element={<PlayMultiplayer />} />
-        <Route path='/singleplayer' element={<GameSingleplayer game={game} userId={user.id} />} />
-        <Route path='/multiplayer' element={<GameMultiplayer game={game} userId={user.id} />} />
-        <Route path='/stats' element={<Stats />} />
-        <Route path='/saved' element={<LoadGamePage game={game} />} />
-        <Route path='/find-game' element={<FindMultiplayer game={game} userId={user.id} />} />
-        <Route path='/host-game' element={<HostMultiplayer game={game} userId={user.id} />} />
-      </Routes>
+      <CurrentUserContext.Provider value={user}>
+        <GameContext.Provider value={game}>
+          <Routes>
+            <Route path='/' element={<Login login={login} isLoggedIn={isLoggedIn} />} />
+            <Route path='/home' element={<Homepage isLoggedIn={isLoggedIn} login={login} logout={logout} />} />
+            <Route path='/play-singleplayer' element={<PlaySingleplayer />} />
+            <Route path='/play-multiplayer' element={<PlayMultiplayer />} />
+            <Route path='/singleplayer' element={<GameSingleplayer />} />
+            <Route path='/multiplayer' element={<GameMultiplayer />} />
+            <Route path='/stats' element={<Stats />} />
+            <Route path='/saved' element={<LoadGamePage />} />
+            <Route path='/find-game' element={<FindMultiplayer />} />
+            <Route path='/host-game' element={<HostMultiplayer />} />
+          </Routes>
+        </GameContext.Provider>
+      </CurrentUserContext.Provider>
     </BrowserRouter>
   )
 }

@@ -1,7 +1,8 @@
 import './GameContainer.scss'
 
-import { Game, Tile, startTile } from '../../Game'
-import { useEffect, useState } from 'react'
+import { CurrentUserContext, GameContext } from '../../App'
+import { Tile, startTile } from '../../Game'
+import { useContext, useEffect, useState } from 'react'
 
 import Draw from '../Draw/Draw'
 import GameBoard from '../GameBoard/GameBoard'
@@ -9,13 +10,13 @@ import { GameTile } from '../GameTile/GameTile'
 import { socket } from '../../socket'
 
 interface Props {
-    game: Game
     isSingleplayer: boolean
-    userId: number
     updateOpponentDetails: (opponentPoints: number, opponentTurns: number) => void
 }
 
-export function GameContainer({ game, userId, isSingleplayer, updateOpponentDetails }: Props) {
+export function GameContainer({ isSingleplayer, updateOpponentDetails }: Props) {
+    const { id } = useContext(CurrentUserContext)
+    const game = useContext(GameContext)
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [opponentTilesInPlay, setOpponentTilesInPlay] = useState<Tile[]>([startTile])
     const [opponentGridSize, setOpponentGridSize] = useState<[number, number]>([3, 3])
@@ -23,10 +24,10 @@ export function GameContainer({ game, userId, isSingleplayer, updateOpponentDeta
 
     useEffect(() => {
         if (!isSingleplayer) {
-            if (game.user_id !== userId) {
+            if (game.user_id !== id) {
                 setIsUserTurn(false)
                 console.log(game.user_id)
-                console.log(userId)
+                console.log(id)
             }
         }
         const handleResize = () => {
@@ -56,14 +57,14 @@ export function GameContainer({ game, userId, isSingleplayer, updateOpponentDeta
 
     return (
         <div className={`game ${isSingleplayer ? '' : 'game--multiplayer'}`}>
-            <Draw game={game} isMobile={isMobile} isUserTurn={isUserTurn} />
+            <Draw isMobile={isMobile} isUserTurn={isUserTurn} />
             <div className='game__container'>
                 <div className='game__board-header'>
                     {isSingleplayer ? '' : <h3>YOU</h3>}
                     {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'THEIR TURN'}</h3>}
                 </div>
                 <div className='game__all-games'>
-                    <GameBoard game={game} isMobile={isMobile} playTurn={playTurn} isUserTurn={isUserTurn} />
+                    <GameBoard isMobile={isMobile} playTurn={playTurn} isUserTurn={isUserTurn} />
                     {isSingleplayer ? '' : (
                         <div className='game__opponent-container'>
                             <h3>OPPONENT</h3>

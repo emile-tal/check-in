@@ -1,9 +1,9 @@
 import './Draw.scss'
 
 import { motion, useAnimate } from 'motion/react'
-import { useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 
-import { Game } from '../../Game'
+import { GameContext } from '../../App'
 import ballroom from '../../assets/ballroom.png'
 import bar from '../../assets/bar.png'
 import deck from '../../assets/draw-pile.png'
@@ -15,12 +15,12 @@ import pool from '../../assets/pool.png'
 import restaurant from '../../assets/restaurant.png'
 
 interface Props {
-    game: Game
     isMobile: boolean
     isUserTurn: boolean
 }
 
-const Draw = observer(function Draw({ game, isMobile, isUserTurn }: Props) {
+const Draw = observer(function Draw({ isMobile, isUserTurn }: Props) {
+    const game = useContext(GameContext)
     const [drawCardTarget, animateDrawCard] = useAnimate()
     const [drawnCardTarget, animateDrawnCard] = useAnimate()
     const openCardRefs = useRef<[React.RefObject<HTMLElement>, any][]>([])

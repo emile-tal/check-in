@@ -1,9 +1,9 @@
 import "./GameLayout.scss"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
-import { Game } from "../../Game"
 import { GameContainer } from "../../components/GameContainer/GameContainer"
+import { GameContext } from "../../App"
 import { GameHeader } from "../../components/GameHeader/GameHeader"
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal"
 import Modal from 'react-modal'
@@ -13,12 +13,11 @@ import { observer } from "mobx-react"
 import { useNavigate } from "react-router-dom"
 
 interface Props {
-    game: Game
     isSingleplayer: boolean
-    userId: number
 }
 
-const GameLayout = observer(function GameLayout({ game, isSingleplayer, userId }: Props) {
+const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
+    const game = useContext(GameContext)
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
@@ -160,7 +159,7 @@ const GameLayout = observer(function GameLayout({ game, isSingleplayer, userId }
     return (
         <div className="game-layout">
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
-            <GameContainer game={game} isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} userId={userId} />
+            <GameContainer isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} />
             <Modal isOpen={gameOverModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
             </Modal>

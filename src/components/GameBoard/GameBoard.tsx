@@ -1,18 +1,19 @@
 import './GameBoard.scss'
 
-import { Game } from '../../Game'
+import { GameContext } from '../../App'
 import { GameTile } from '../GameTile/GameTile'
 import { Tile } from '../../Game'
 import { observer } from 'mobx-react'
+import { useContext } from 'react'
 
 interface Props {
-    game: Game
     isMobile: boolean
     playTurn: (tile: Tile) => void
     isUserTurn: boolean
 }
 
-const GameBoard = observer(function GameBoard({ game, isMobile, playTurn, isUserTurn }: Props) {
+const GameBoard = observer(function GameBoard({ isMobile, playTurn, isUserTurn }: Props) {
+    const game = useContext(GameContext)
 
     return (
         <div className={`gameboard ${isUserTurn ? 'gameboard--selected' : ''}`}>

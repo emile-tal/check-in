@@ -1,17 +1,15 @@
 import './SavedGames.scss'
 
-import { Game, Tile } from '../../Game'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { Button } from '../Button/Button'
+import { GameContext } from '../../App'
+import { Tile } from '../../Game'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-interface Props {
-    game: Game
-}
-
-export function SavedGames({ game }: Props) {
+export function SavedGames() {
+    const game = useContext(GameContext)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [selectedGame, setSelectedGame] = useState<number>(0)
 

@@ -1,17 +1,15 @@
 import './FindPlayersDisplay.scss'
 
-import { useEffect, useState } from 'react'
+import { CurrentUserContext, GameContext } from '../../App'
+import { useContext, useEffect, useState } from 'react'
 
 import { Button } from '../Button/Button'
-import { Game } from '../../Game'
 import axios from 'axios'
 import { socket } from '../../socket'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
-    game: Game
     isHostingGame: boolean
-    userId: number
 }
 
 interface SelectedGame {
@@ -19,7 +17,9 @@ interface SelectedGame {
     id: number
 }
 
-export function FindPlayersDisplay({ game, isHostingGame, userId }: Props) {
+export function FindPlayersDisplay({ isHostingGame }: Props) {
+    const { id } = useContext(CurrentUserContext)
+    const game = useContext(GameContext)
     const [selectedGame, setSelectedGame] = useState<SelectedGame>({ name: '', id: 0 })
     const [canStartGame, setCanStartGame] = useState<boolean>(false)
     const navigate = useNavigate()
@@ -70,7 +70,7 @@ export function FindPlayersDisplay({ game, isHostingGame, userId }: Props) {
                     is_singleplayer: 0
                 }
                 createMultiplayerGame(jwtToken, gameObject)
-                game.setUser(userId)
+                game.setUser(id)
             }
         } else {
             if (jwtToken) {
@@ -98,9 +98,8 @@ export function FindPlayersDisplay({ game, isHostingGame, userId }: Props) {
     const startGame = () => {
         if (canStartGame) {
             socket.emit('start game', { roomName: selectedGame.id, drawTiles: game.drawTiles })
-            console.log(userId)
             game.joinGame(selectedGame.id)
-            game.setUser(userId)
+            game.setUser(id)
             game.setPlayers(2)
             navigate('/multiplayer')
         }
