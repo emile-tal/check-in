@@ -1,13 +1,19 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .saved-games {
     padding: 1.5rem;
-    width: 30rem;
+    width: 16.5rem;
     background-color: $primaryColor3;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
+
+    @include tablet {
+        width: 20rem;
+    }
 
     &__container {
         padding-bottom: 2rem;
@@ -16,21 +22,22 @@
     &__header-container {
         display: flex;
         padding: 0 0.5rem 1rem;
+        align-items: center;
     }
 
     &__header {
-        display: inline-block;
+        font-size: 1.15rem;
+
+        @include tablet {
+            font-size: 1.4rem;
+        }
 
         &--game {
-            width: 10rem;
+            width: 55%;
         }
 
         &--date {
-            width: 12rem;
-        }
-
-        &--type {
-            width: 8rem;
+            width: 45%;
         }
     }
 
@@ -51,16 +58,18 @@
     }
 
     &__item {
+        font-size: 0.8rem;
+
+        @include tablet {
+            font-size: 1rem;
+        }
+
         &--game {
-            width: 10rem;
+            width: 55%;
         }
 
         &--date {
-            width: 12rem;
-        }
-
-        &--type {
-            width: 8rem;
+            width: 45%;
         }
     }
 }

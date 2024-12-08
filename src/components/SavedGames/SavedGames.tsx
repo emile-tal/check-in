@@ -8,7 +8,12 @@ import { GameContext } from '../../App'
 import { Tile } from '../../Game'
 import axios from 'axios'
 
-export function SavedGames() {
+interface Props {
+    parentUrl: string
+    isSingleplayer: boolean
+}
+
+export function SavedGames({ parentUrl, isSingleplayer }: Props) {
     const game = useContext(GameContext)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [selectedGame, setSelectedGame] = useState<number>(0)
@@ -39,7 +44,7 @@ export function SavedGames() {
         try {
             const { data } = await axios.get(`${baseUrl}games`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             const games: SavedGame[] = data.games
-            if (game.numberOfPlayers === 1) {
+            if (isSingleplayer) {
                 setAllGames(games.filter((game) => game.is_singleplayer === 1))
             } else {
                 setAllGames(games.filter((game) => game.is_singleplayer !== 1))
@@ -109,15 +114,13 @@ export function SavedGames() {
                 allGames ? (
                     <div className='saved-games__container'>
                         <div className='saved-games__header-container'>
-                            <h2 className='saved-games__header--game'>Game</h2>
-                            <h2 className='saved-games__header--date'>Last played</h2>
-                            <h2 className='saved-games__header--type'>Type</h2>
+                            <h2 className='saved-games__header saved-games__header--game'>Game</h2>
+                            <h2 className='saved-games__header saved-games__header--date'>Last played</h2>
                         </div>
                         {allGames.sort((a, b) => formatDate(b.updated_at).getTime() - formatDate(a.updated_at).getTime()).map((game) => (
                             <ul className={`saved-games__row ${selectedGame === game.id ? 'saved-games__row--selected' : ''}`} key={game.id} onClick={() => toggleSelectedGame(game.id)}>
-                                <li className='saved-games__item--game'>{game.name}</li>
-                                <li className='saved-games__item--date'>{formatDate(game.updated_at).toLocaleDateString()}</li>
-                                <li className='saved-games__item--type'>{game.is_singleplayer ? 'Singleplayer' : 'Multiplayer'}</li>
+                                <li className='saved-games__item saved-games__item--game'>{game.name}</li>
+                                <li className='saved-games__item saved-games__item--date'>{formatDate(game.updated_at).toLocaleDateString()}</li>
                             </ul>
                         ))}
                     </div>
@@ -129,7 +132,7 @@ export function SavedGames() {
             )
             }
             <Button style='primary' text='LOAD GAME' onClick={loadSavedGame} />
-            <Link to='/play-singleplayer'><Button style='primary' text='BACK' /></Link>
+            <Link to={parentUrl}><Button style='primary' text='BACK' /></Link>
         </div >
     )
 }

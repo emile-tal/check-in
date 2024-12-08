@@ -49,7 +49,7 @@ export function PlayMultiplayer() {
                     <Button style='primary' text='NEW GAME' onClick={chooseName} />
                 )}
                 <Link to='/find-game' className="play-multiplayer__link"><Button style='primary' text='FIND GAME' /></Link>
-                <Link to='/saved' className="play-multiplayer__link"><Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' /></Link>
+                <Link to='/saved' state={{ parent: '/play-multiplayer', isSingleplayer: false }} className="play-multiplayer__link"><Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' /></Link>
                 <Link to='/home' className='play-multiplayer__link'><Button style='primary' text='BACK' /></Link>
             </div>
         </div>

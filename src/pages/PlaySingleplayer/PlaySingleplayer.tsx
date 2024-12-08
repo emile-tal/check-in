@@ -52,7 +52,7 @@ export function PlaySingleplayer() {
                         <Button style='primary' text='NEW GAME' onClick={chooseName} />
                     )}
                 </div>
-                <Link to='/saved' className='play-singleplayer__link play-singlepl'><Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' /></Link>
+                <Link to='/saved' state={{ parent: '/play-singleplayer', isSingleplayer: true }} className='play-singleplayer__link play-singlepl'><Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' /></Link>
                 <Link to='/home' className='play-singleplayer__link'><Button style='primary' text='BACK' /></Link>
             </div>
         </div>
