@@ -93,6 +93,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     const joinRoom = () => {
         if (selectedGame.id > 0) {
             socket.emit('join room', selectedGame.id)
+            game.restart()
             game.joinGame(selectedGame.id)
             game.setPlayers(2)
             setJoinedGame(true)

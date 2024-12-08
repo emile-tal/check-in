@@ -120,8 +120,8 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
     }
 
     const closeGameOverModal = () => {
+        game.restart()
         setGameOverModalIsOpen(false)
-        restartGame()
     }
 
     const closeSettingsModal = () => {

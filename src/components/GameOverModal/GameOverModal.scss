@@ -14,13 +14,45 @@
         width: 80%;
     }
 
-    &__title {
-        font-size: 3rem;
-        color: $red;
+    &__text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
     }
 
     &__points {
-        padding-bottom: 1rem;
+        padding-bottom: 0.25rem;
+        font-size: 1rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 1.1rem;
+        }
+    }
+
+    &__emphasize {
+        margin-bottom: 0.5rem;
+        font-size: 5rem;
+
+        &--green {
+            color: darkgreen;
+        }
+
+        &--red {
+            color: $red;
+        }
+    }
+
+    &__button-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 1rem;
+
     }
 
     &__link {

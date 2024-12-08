@@ -18,14 +18,23 @@ export function GameOverModal({ totalPoints, closeGameOverModal, isSingleplayer,
 
     return (
         <div className='game-over-modal'>
-            <h2 className='game-over-modal__title'>GAME OVER</h2>
             {isSingleplayer ? (
-                <p className='game-over-modal__points'>You scored a total of <strong>{totalPoints}</strong> points!</p>
+                <p className='game-over-modal__points'>You scored a total of <span className='game-over-modal__emphasize game-over-modal__emphasize--green'>{totalPoints}</span> points!</p>
             ) : (
-                <p className='game-over-modal__points'>{totalPoints > opponentPoints ? 'You WIN!' : 'You LOSE!'}</p>
+                <div className='game-over-modal__text-container'>
+                    <p className='game-over-modal__points'>You {totalPoints >= opponentPoints ? (
+                        <span className='game-over-modal__emphasize game-over-modal__emphasive--green'>WIN</span>
+                    ) : (
+                        <span className='game-over-modal__emphasize game-over-modal__emphasive--red'>LOSE</span>
+                    )}</p>
+                    <p className='game-over-modal__points'>Your score: {totalPoints}</p>
+                    <p className='game-over-modal__points'>Opponent's score: {opponentPoints}</p>
+                </div>
             )}
-            <Link to={'/home'} className='game-over-modal__link' onClick={closeGameOverModal}><Button text='RETURN HOME' style='primary' /></Link>
-            {isSingleplayer ? <Link to={'/singleplayer'} className='game-over-modal__link' onClick={handleRestart}><Button text='RESTART' style='primary' /></Link> : ''}
+            <div className='game-over-modal__button-container'>
+                <Link to={'/home'} className='game-over-modal__link' onClick={closeGameOverModal}><Button text='RETURN HOME' style='primary' /></Link>
+                {isSingleplayer ? <Link to={'/singleplayer'} className='game-over-modal__link' onClick={handleRestart}><Button text='RESTART' style='primary' /></Link> : ''}
+            </div>
         </div>
     )
 }

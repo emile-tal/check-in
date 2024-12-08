@@ -26,8 +26,6 @@ export function GameContainer({ isSingleplayer, updateOpponentDetails }: Props) 
         if (!isSingleplayer) {
             if (game.user_id !== id) {
                 setIsUserTurn(false)
-                console.log(game.user_id)
-                console.log(id)
             }
         }
         const handleResize = () => {
