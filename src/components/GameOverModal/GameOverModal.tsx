@@ -23,9 +23,9 @@ export function GameOverModal({ totalPoints, closeGameOverModal, isSingleplayer,
             ) : (
                 <div className='game-over-modal__text-container'>
                     <p className='game-over-modal__points'>You {totalPoints >= opponentPoints ? (
-                        <span className='game-over-modal__emphasize game-over-modal__emphasive--green'>WIN</span>
+                        <span className='game-over-modal__emphasize game-over-modal__emphasize--green'>WIN</span>
                     ) : (
-                        <span className='game-over-modal__emphasize game-over-modal__emphasive--red'>LOSE</span>
+                        <span className='game-over-modal__emphasize game-over-modal__emphasize--red'>LOSE</span>
                     )}</p>
                     <p className='game-over-modal__points'>Your score: {totalPoints}</p>
                     <p className='game-over-modal__points'>Opponent's score: {opponentPoints}</p>

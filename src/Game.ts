@@ -183,11 +183,7 @@ class Game {
     }
 
     nextTurn() {
-        if (this.selectedDrawTile[1] !== -1) {
-            this.drawTiles[this.selectedDrawTile[1]] = generateRandomRoom()
-        } else {
-            this.deckTileSelected = false
-        }
+        this.deckTileSelected = false
         this.drawTileSelected = false
         this.selectedDrawTile = ['', -1]
     }
