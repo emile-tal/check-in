@@ -46,7 +46,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
             const { games_played_single, games_played_multi, total_points, max_score } = await fetchStats(jwtToken)
             const updatedStats = {
                 games_played_single: isSingleplayer ? games_played_single + 1 : games_played_single,
-                games_played_multi: isSingleplayer ? games_played_multi + 1 : games_played_multi,
+                games_played_multi: isSingleplayer ? games_played_multi : games_played_multi + 1,
                 total_points: total_points + game.totalPoints,
                 max_score: max_score < game.totalPoints ? game.totalPoints : max_score
             }
@@ -95,6 +95,10 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
         }
     }
 
+    const deleteSavedGame = async (jwtToken: string) => {
+        await axios.delete(`${baseUrl}games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+    }
+
     const openSettingsModal = () => {
         setSettingsModalIsOpen(true)
     }
@@ -138,6 +142,9 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
         const jwtToken = localStorage.getItem('jwt_token')
         if (jwtToken) {
             updateStats(jwtToken)
+            if (game.id !== 0) {
+                deleteSavedGame(jwtToken)
+            }
         }
     }
 

@@ -22,6 +22,7 @@ export function SavedGames() {
 
     interface LoadingGame {
         id: number
+        name: string
         draw_0: string
         draw_1: string
         draw_2: string
@@ -84,7 +85,7 @@ export function SavedGames() {
             if (loadingGame.is_singleplayer) {
                 const drawTiles = [loadingGame.draw_0, loadingGame.draw_1, loadingGame.draw_2]
                 const tilesInPlay = loadingGameTiles.map(({ room, row, column }) => ({ room, row, column }))
-                game.loadGame(tilesInPlay, drawTiles, loadingGame.id)
+                game.loadGame(tilesInPlay, drawTiles, loadingGame.id, loadingGame.name)
                 navigate('/singleplayer')
             }
         }

@@ -1,12 +1,12 @@
 import './FindPlayersDisplay.scss'
 
 import { CurrentUserContext, GameContext } from '../../App'
-import { Link, useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 
 import { Button } from '../Button/Button'
 import axios from 'axios'
 import { socket } from '../../socket'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
     isHostingGame: boolean
@@ -46,10 +46,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     const fetchMultiplayerGames = async (jwtToken: string) => {
         const { data } = await axios.get(`${baseUrl}multi`, { headers: { Authorization: `Bearer ${jwtToken}` } })
         const games: OpenMultiplayerGame[] = data.games
-        const uniqueGames = games
-        //TODO make games unique (eliminate doubles)
-
-        setOpenGames(uniqueGames)
+        setOpenGames(games)
     }
 
     const createMultiplayerGame = async (jwtToken: string, newMultiplayerGame: newMultiplayerGame) => {
@@ -57,6 +54,10 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
         const { game } = data
         socket.emit('join room', game.id)
         setSelectedGame({ name: game.name, id: game.id })
+    }
+
+    const deleteMultiplayerGame = async (jwtToken: string) => {
+        await axios.delete(`${baseUrl}games/${selectedGame.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
     }
 
     useEffect(() => {
@@ -96,6 +97,16 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
             game.setPlayers(2)
             setJoinedGame(true)
         }
+    }
+
+    const goBack = () => {
+        const jwtToken = localStorage.getItem('jwt_token')
+        if (isHostingGame) {
+            if (jwtToken) {
+                deleteMultiplayerGame(jwtToken)
+            }
+        }
+        navigate('/play-multiplayer')
     }
 
     const startGame = () => {
@@ -141,7 +152,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
             </div>
             <div className='find-players__buttons'>
                 <Button style={isHostingGame ? canStartGame ? 'primary' : 'primary-unclickable' : joinedGame ? 'primary-unclickable' : 'primary'} text={isHostingGame ? 'START GAME' : 'JOIN GAME'} onClick={isHostingGame ? startGame : joinRoom} />
-                <Link to='/play-multiplayer'><Button style='primary' text='BACK' /></Link>
+                <Button style='primary' text='BACK' onClick={goBack} />
             </div>
         </div>
     )

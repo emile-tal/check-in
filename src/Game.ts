@@ -203,15 +203,17 @@ class Game {
         this.drawTileSelected = false
         this.deckTileSelected = false
         this.id = 0
+        this.name = ''
     }
 
-    loadGame(tilesInPlay: Tile[], drawTiles: string[], gameId: number) {
+    loadGame(tilesInPlay: Tile[], drawTiles: string[], gameId: number, name: string) {
         this.tilesInPlay = tilesInPlay
         this.drawTiles = drawTiles
         this.selectedDrawTile = ['', -1]
         this.drawTileSelected = false
         this.deckTileSelected = false
         this.id = gameId
+        this.name = name
     }
 
     setPlayers(numberOfPlayers: number) {

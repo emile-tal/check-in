@@ -28,6 +28,10 @@
 
     &__container {
         width: 100%;
+
+        @include tablet {
+            max-width: calc(100% - 12rem)
+        }
     }
 
     &__board-header {

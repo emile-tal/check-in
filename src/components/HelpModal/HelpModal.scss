@@ -1,13 +1,13 @@
 .help-modal {
     font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
-    width: 85%;
+    width: 90%;
 
     &__heading {
         padding-bottom: 2rem;
     }
 
     &__text {
-        padding: 2.5rem 0;
+        padding: 2rem 0;
         line-height: 1.5rem;
     }
 
@@ -25,5 +25,11 @@
 
     &__room-image {
         width: 3.75rem;
+    }
+
+    &__points-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
     }
 }

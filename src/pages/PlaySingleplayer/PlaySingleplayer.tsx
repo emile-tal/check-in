@@ -29,6 +29,7 @@ export function PlaySingleplayer() {
         if (gameName.trim() === '') {
             setInvalidGameName(true)
         } else {
+            game.restart()
             game.setName(gameName)
             navigate('/singleplayer')
         }
