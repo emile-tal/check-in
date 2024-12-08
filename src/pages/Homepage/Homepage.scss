@@ -4,6 +4,16 @@
     @include main-menu;
     @include page-background;
 
+    &__header {
+        font-family: 'Luckiest Guy', Arial, Helvetica, sans-serif;
+        font-size: 1.75rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 3rem;
+        }
+    }
+
     &__button-container {
         @include main-menu-button-container;
     }

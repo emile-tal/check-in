@@ -10,13 +10,14 @@ interface Props {
     isMobile: boolean
     playTurn: (tile: Tile) => void
     isUserTurn: boolean
+    isSingleplayer: boolean
 }
 
-const GameBoard = observer(function GameBoard({ isMobile, playTurn, isUserTurn }: Props) {
+const GameBoard = observer(function GameBoard({ isMobile, playTurn, isUserTurn, isSingleplayer }: Props) {
     const game = useContext(GameContext)
 
     return (
-        <div className={`gameboard ${isUserTurn ? 'gameboard--selected' : ''}`}>
+        <div className={`gameboard ${isUserTurn && !isSingleplayer ? 'gameboard--turn' : ''}`}>
             <div className='gameboard__game'
                 style={{
                     gridTemplateColumns: `repeat(${game.gridSize[1]}, ${isMobile ? '5rem' : '6rem'})`,

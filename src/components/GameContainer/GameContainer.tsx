@@ -64,7 +64,7 @@ export function GameContainer({ isSingleplayer, updateOpponentDetails }: Props) 
                     {isSingleplayer ? '' : <h3>{isUserTurn ? 'YOUR TURN' : 'THEIR TURN'}</h3>}
                 </div>
                 <div className='game__all-games'>
-                    <GameBoard isMobile={isMobile} playTurn={playTurn} isUserTurn={isUserTurn} />
+                    <GameBoard isMobile={isMobile} playTurn={playTurn} isUserTurn={isUserTurn} isSingleplayer={isSingleplayer} />
                     {isSingleplayer ? '' : (
                         <div className='game__opponent-container'>
                             <h3>OPPONENT</h3>

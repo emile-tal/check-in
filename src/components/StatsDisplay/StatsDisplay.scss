@@ -1,12 +1,21 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .stats-display {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem;
-    width: 20rem;
+    width: 16.5rem;
     background-color: $primaryColor3;
+    font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    font-size: 1rem;
+
+    @include tablet {
+        font-size: 1.1rem;
+        width: 20rem;
+    }
 
     &__row {
         display: flex;

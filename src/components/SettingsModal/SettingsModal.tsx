@@ -21,8 +21,8 @@ export function SettingsModal({ restartGame, saveGame, closeSettingsModal, isLog
         <div className='settings-modal'>
             <Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='SAVE' onClick={saveGame} />
             <Button style='primary' text='RESTART' onClick={restartGame} />
-            <Button style='primary' text='MAIN MENU' onClick={goToHome} />
             <Button style='primary' text='RETURN TO GAME' onClick={closeSettingsModal} />
+            <Button style='primary' text='MAIN MENU' onClick={goToHome} />
         </div>
     )
 }

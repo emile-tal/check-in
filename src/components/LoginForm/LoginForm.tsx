@@ -4,19 +4,28 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '../Button/Button'
 import axios from 'axios'
+import logo from '../../assets/logo.png'
 import { useState } from 'react'
 
 interface Props {
     login: (jwtToken: string) => void
 }
 
+interface ErrorTracker {
+    error: boolean
+    type: string
+}
+
+const blankErrorTracker = { error: false, type: '' }
+
 export function LoginForm({ login }: Props) {
     const [newUser, setNewUser] = useState<boolean>(false)
     const [username, setUsername] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [emptyFields, setEmptyFields] = useState<string[]>([])
-    const [invalidEmail, setInvalidEmail] = useState<boolean>(false)
+    const [emailError, setEmailError] = useState<ErrorTracker>(blankErrorTracker)
+    const [passwordError, setPasswordError] = useState<ErrorTracker>(blankErrorTracker)
+    const [userError, setUserError] = useState<ErrorTracker>(blankErrorTracker)
 
     const navigate = useNavigate()
 
@@ -37,8 +46,16 @@ export function LoginForm({ login }: Props) {
                 localStorage.setItem('jwt_token', token)
                 navigate('/home')
             }
-        } catch (error) {
-            console.error(error)
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 400) {
+                    setUserError({ error: true, type: 'Username exists already' })
+                } else {
+                    console.error(error)
+                }
+            } else {
+                console.error(error)
+            }
         }
     }
 
@@ -51,8 +68,19 @@ export function LoginForm({ login }: Props) {
                 localStorage.setItem('jwt_token', token)
                 navigate('/home')
             }
-        } catch (error) {
-            console.error(error)
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 401) {
+                    setUserError({ error: true, type: 'Incorrect username or password' })
+                    setPasswordError({ error: true, type: 'Incorrect username or password' })
+                    setUsername('')
+                    setPassword('')
+                } else {
+                    console.error(error)
+                }
+            } else {
+                console.error(error)
+            }
         }
     }
 
@@ -68,33 +96,46 @@ export function LoginForm({ login }: Props) {
         setPassword(event.target.value)
     }
 
-    const handleSubmit = () => {
-        const emptyFieldTracker: string[] = []
-        setInvalidEmail(false)
+    const validateForm = (userData: User) => {
+        let isFormValid = true
+        setUserError(blankErrorTracker)
+        setEmailError(blankErrorTracker)
+        setPasswordError(blankErrorTracker)
+        if (userData.username.trim() === '') {
+            setUserError({ error: true, type: 'This field is required' })
+            isFormValid = false
+        }
+        if (userData.password.trim() === '') {
+            setPasswordError({ error: true, type: 'This field is required' })
+            isFormValid = false
+        } else if (userData.password.length < 8) {
+            setPasswordError({ error: true, type: 'Password must have at least 8 characters' })
+            isFormValid = false
+        }
+        if (newUser) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!userData.email) {
+                setEmailError({ error: true, type: 'This field is required' })
+                isFormValid = false
+            } else if (!emailPattern.test(email)) {
+                setEmailError({ error: true, type: "Please enter a valid email address" })
+                isFormValid = false
+            }
+        }
+        return isFormValid
+    }
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault()
         let userData: User = {
             username: username,
             password: password,
         }
-        if (!userData.username) {
-            emptyFieldTracker.push('username')
-        }
-        if (!userData.password) {
-            emptyFieldTracker.push('password')
-        }
         if (newUser) {
             userData = { ...userData, email: email }
-            if (!userData.email) {
-                emptyFieldTracker.push('email')
-            }
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (emailPattern.test(email)) {
-                setInvalidEmail(false)
-            } else {
-                setInvalidEmail(true)
-            }
         }
-        setEmptyFields(emptyFieldTracker)
-        if (emptyFieldTracker.length === 0 && !invalidEmail) {
+        const formValid = validateForm(userData)
+        if (formValid) {
             if (newUser) {
                 registerUser(userData)
             } else {
@@ -105,8 +146,9 @@ export function LoginForm({ login }: Props) {
 
     const handleLogin = () => {
         setNewUser(false)
-        setInvalidEmail(false)
-        setEmptyFields([])
+        setUserError(blankErrorTracker)
+        setEmailError(blankErrorTracker)
+        setPasswordError(blankErrorTracker)
         setUsername('')
         setEmail('')
         setPassword('')
@@ -114,8 +156,9 @@ export function LoginForm({ login }: Props) {
 
     const handleRegister = () => {
         setNewUser(true)
-        setInvalidEmail(false)
-        setEmptyFields([])
+        setUserError(blankErrorTracker)
+        setEmailError(blankErrorTracker)
+        setPasswordError(blankErrorTracker)
         setUsername('')
         setEmail('')
         setPassword('')
@@ -123,47 +166,50 @@ export function LoginForm({ login }: Props) {
 
     return (
         <div className='login-form'>
+            <img className='login-form__logo' alt='Check-in logo' src={logo} />
             <div className='login-form__user-button-container'>
                 <button
-                    className={`login-form__user-button login-form__user-button--current ${newUser ? '' : 'login-form__user-button--selected'}`}
+                    className={`login-form__user-button ${newUser ? '' : 'login-form__user-button--selected'}`}
                     onClick={handleLogin}
                 >Current User</button>
                 <button
-                    className={`login-form__user-button login-form__user-button--register ${newUser ? 'login-form__user-button--selected' : ''}`}
+                    className={`login-form__user-button ${newUser ? 'login-form__user-button--selected' : ''}`}
                     onClick={handleRegister}
                 >New User</button>
             </div>
-            <form className='login-form__form' >
-                <label className='login-form__label' htmlFor='username' >Username: </label>
-                <input
-                    className={`login-form__input ${emptyFields.includes('username') ? 'login-form__input--invalid' : ''}`}
-                    name='username'
-                    type='text'
-                    value={username}
-                    onChange={handleUsernameChange}
-                />
-                {emptyFields.includes('username') && <span className='login-form__error'>This field is required</span>}
-                {newUser && <label className='login-form__label' htmlFor='email'>Email: </label>}
-                {newUser && <input
-                    className={`login-form__input ${emptyFields.includes('email') || invalidEmail ? 'login-form__input--invalid' : ''}`}
-                    name='email'
-                    type='text'
-                    value={email}
-                    onChange={handleEmailChange}
-                />}
-                {(emptyFields.includes('email') || invalidEmail) && newUser && <span className='login-form__error'>{emptyFields.includes('email') ? 'This field is required' : 'Please enter a valid email address'}</span>}
-                <label className='login-form__label' htmlFor='password'>Password: </label>
-                <input
-                    className={`login-form__input ${emptyFields.includes('password') ? 'login-form__input--invalid' : ''}`}
-                    name='password'
-                    type='password'
-                    value={password}
-                    onChange={handlePasswordChange}
-                />
-                {emptyFields.includes('password') && <span className='login-form__error'>This field is required</span>}
-                <Button text={newUser ? 'Register' : 'Login'} style='login' onClick={handleSubmit} />
-            </form>
-            <div className='login-form__guest-button-container'>
+            <div className='login-form__form-container'>
+                <form className='login-form__form' onSubmit={handleSubmit}>
+                    <label className='login-form__label' htmlFor='username' >Username: </label>
+                    <input
+                        className={`login-form__input ${userError.error ? 'login-form__input--invalid' : ''}`}
+                        name='username'
+                        type='text'
+                        value={username}
+                        onChange={handleUsernameChange}
+                    />
+                    {userError.error && <span className='login-form__error'>{userError.type}</span>}
+                    {newUser && <label className='login-form__label' htmlFor='email'>Email: </label>}
+                    {newUser && <input
+                        className={`login-form__input ${emailError.error ? 'login-form__input--invalid' : ''}`}
+                        name='email'
+                        type='text'
+                        value={email}
+                        onChange={handleEmailChange}
+                    />}
+                    {emailError.error && newUser && <span className='login-form__error'>{emailError.type}</span>}
+                    <label className='login-form__label' htmlFor='password'>Password: </label>
+                    <input
+                        className={`login-form__input ${passwordError.error ? 'login-form__input--invalid' : ''}`}
+                        name='password'
+                        type='password'
+                        value={password}
+                        onChange={handlePasswordChange}
+                    />
+                    {passwordError.error && <span className='login-form__error'>{passwordError.type}</span>}
+                    <div className='login-form__form-button'>
+                        <Button text={newUser ? 'Register' : 'Login'} style='login' />
+                    </div>
+                </form>
                 <Link to='/home' className='login-form__button-link'><Button text='Continue as Guest' style='login' /></Link>
             </div>
         </div>

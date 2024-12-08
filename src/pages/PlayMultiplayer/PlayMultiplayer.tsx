@@ -21,7 +21,7 @@ export function PlayMultiplayer() {
                 <Link to='/host-game' className='play-multiplayer__link'><Button style='primary' text='NEW GAME' /></Link>
                 <Link to='/find-game' className="play-multiplayer__link"><Button style='primary' text='FIND GAME' /></Link>
                 <Link to='/saved' className="play-multiplayer__link"><Button style={isLoggedIn ? 'primary' : 'primary-unclickable'} text='LOAD GAME' /></Link>
-                <Link to='/home' className='play-multiplayer__link'><Button style='primary' text='BACK TO MENU' /></Link>
+                <Link to='/home' className='play-multiplayer__link'><Button style='primary' text='BACK' /></Link>
             </div>
         </div>
     )

@@ -1,12 +1,12 @@
 import './SavedGames.scss'
 
+import { Link, useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 
 import { Button } from '../Button/Button'
 import { GameContext } from '../../App'
 import { Tile } from '../../Game'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 export function SavedGames() {
     const game = useContext(GameContext)
@@ -90,10 +90,6 @@ export function SavedGames() {
         }
     }
 
-    const goToMenu = () => {
-        navigate('/home')
-    }
-
     const toggleSelectedGame = (game_id: number) => {
         if (game_id !== selectedGame) {
             setSelectedGame(game_id)
@@ -132,7 +128,7 @@ export function SavedGames() {
             )
             }
             <Button style='primary' text='LOAD GAME' onClick={loadSavedGame} />
-            <Button style='primary' text='BACK TO MENU' onClick={goToMenu} />
+            <Link to='/play-singleplayer'><Button style='primary' text='BACK' /></Link>
         </div >
     )
 }

@@ -1,12 +1,12 @@
 import './FindPlayersDisplay.scss'
 
 import { CurrentUserContext, GameContext } from '../../App'
+import { Link, useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 
 import { Button } from '../Button/Button'
 import axios from 'axios'
 import { socket } from '../../socket'
-import { useNavigate } from 'react-router-dom'
 
 interface Props {
     isHostingGame: boolean
@@ -22,6 +22,8 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     const game = useContext(GameContext)
     const [selectedGame, setSelectedGame] = useState<SelectedGame>({ name: '', id: 0 })
     const [canStartGame, setCanStartGame] = useState<boolean>(false)
+    const [joinedGame, setJoinedGame] = useState<boolean>(false)
+    const [playersJoined, setPlayersJoined] = useState<number>(0)
     const navigate = useNavigate()
 
     interface OpenMultiplayerGame {
@@ -92,6 +94,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
             socket.emit('join room', selectedGame.id)
             game.joinGame(selectedGame.id)
             game.setPlayers(2)
+            setJoinedGame(true)
         }
     }
 
@@ -106,11 +109,13 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     }
 
     socket.on("room size", (roomSize: number) => {
+        setPlayersJoined(roomSize)
         if (roomSize > 1) {
             setCanStartGame(true)
         } else {
             setCanStartGame(false)
         }
+        console.log(playersJoined)
     })
 
     socket.on('start', (drawTiles: string[]) => {
@@ -122,16 +127,23 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
         <div className='find-players'>
             <h2 className='find-players__header'>{isHostingGame ? 'Waiting for players to join' : 'Select a game to join'}</h2>
             <div className='find-players__games-container'>
-                {isHostingGame ? ('test') : (
-                    //TODO set state for when user is waiting for game to start but user has already 'joined'
-                    openGames.map((game) => (
-                        <div className={`find-players__row ${selectedGame.id === game.id ? 'find-players__row--selected' : ''} `} key={game.id} onClick={() => selectGame(game.id, game.name)}  >
-                            <span className='find-players__games'>{game.name}</span>
-                        </div>
-                    ))
-                )}
+                {isHostingGame ? (
+                    <span className='find-players__text'>{`${playersJoined > 1 ? playersJoined - 1 : '0'} player${playersJoined === 2 ? ' has' : 's have'} joined`}</span>
+                ) : (
+                    joinedGame ? (
+                        <span className='find-players__text'>Successfully joined! Waiting for host to start game</span>
+                    ) : (
+                        openGames.map((game) => (
+                            <div className={`find-players__row ${selectedGame.id === game.id ? 'find-players__row--selected' : ''} `} key={game.id} onClick={() => selectGame(game.id, game.name)}  >
+                                <span className='find-players__games'>{game.name}</span>
+                            </div>
+                        ))
+                    ))}
             </div>
-            <Button style='primary' text={isHostingGame ? 'START GAME' : 'JOIN GAME'} onClick={isHostingGame ? startGame : joinRoom} />
+            <div className='find-players__buttons'>
+                {joinedGame ? '' : <Button style={canStartGame ? 'primary' : 'primary-unclickable'} text={isHostingGame ? 'START GAME' : 'JOIN GAME'} onClick={isHostingGame ? startGame : joinRoom} />}
+                <Link to='/play-multiplayer'><Button style='primary' text='BACK' /></Link>
+            </div>
         </div>
     )
 }

@@ -41,10 +41,14 @@
 }
 
 @mixin main-menu-button-container {
-    width: 20rem;
+    width: 16.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1rem;
+
+    @include tablet {
+        width: 20rem;
+    }
 }

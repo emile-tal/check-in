@@ -36,7 +36,7 @@ export function Homepage({ isLoggedIn, login, logout }: Props) {
 
     return (
         <div className='home'>
-            <h1 className='home__logo'>{`Welcome ${isLoggedIn ? username : 'Guest'}`}</h1>
+            <h1 className='home__header'>{`WELCOME ${isLoggedIn ? username : 'GUEST'}`}</h1>
             <div className='home__button-container'>
                 <Link to='/play-singleplayer' className='home__link'><Button text='SINGLEPLAYER' style='primary' /></Link>
                 <Link to='/play-multiplayer' className='home__link'><Button text='MULTIPLAYER' style={isLoggedIn ? 'primary' : 'primary-unclickable'} /></Link>

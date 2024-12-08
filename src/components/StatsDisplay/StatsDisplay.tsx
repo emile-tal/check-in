@@ -52,7 +52,7 @@ export function StatsDisplay() {
                 <span className='stats-display__text'>Max score</span>
                 <span className='stats-display__text'>{maxScore}</span>
             </div>
-            <Link to={'/home'} className='stats-display__link'><Button style='primary' text='BACK HOME' /></Link>
+            <Link to={'/home'} className='stats-display__link'><Button style='primary' text='BACK' /></Link>
         </div>
     )
 }
