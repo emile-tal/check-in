@@ -59,7 +59,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
             const { data } = await axios.get(`${baseUrl}games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             if (data.game) {
                 const gameData = {
-                    name: Date.now(),
+                    name: game.name,
                     draw_0: game.drawTiles[0],
                     draw_1: game.drawTiles[1],
                     draw_2: game.drawTiles[2],
@@ -73,7 +73,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
             if (axios.isAxiosError(error)) {
                 if (error.response && error.response.status === 404) {
                     const gameData = {
-                        name: Date.now(),
+                        name: game.name,
                         draw_0: game.drawTiles[0],
                         draw_1: game.drawTiles[1],
                         draw_2: game.drawTiles[2],
@@ -161,7 +161,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
             <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
             <GameContainer isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} />
             <Modal isOpen={gameOverModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay'>
-                <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} />
+                <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
             </Modal>
             <Modal isOpen={settingsModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay' onRequestClose={closeSettingsModal} >
                 <SettingsModal restartGame={restartGame} saveGame={saveGame} closeSettingsModal={closeSettingsModal} isLoggedIn={isLoggedIn} />

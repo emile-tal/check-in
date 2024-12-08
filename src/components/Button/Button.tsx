@@ -11,3 +11,4 @@ export function Button({ text, style, onClick }: Props) {
         <button className={`button button--${style}`} onClick={() => onClick ? onClick() : null} type='submit' >{text}</button>
     )
 }
+

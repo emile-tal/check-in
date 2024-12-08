@@ -28,6 +28,7 @@ class Game {
     deckTileSelected: boolean
     id: number
     numberOfPlayers: number
+    name: string
 
     constructor() {
         makeAutoObservable(this, {
@@ -44,6 +45,7 @@ class Game {
         this.deckTileSelected = false
         this.id = 0
         this.numberOfPlayers = 1
+        this.name = ''
     }
 
     get totalPoints() {
@@ -64,6 +66,10 @@ class Game {
 
     setUser(user_id: number) {
         this.user_id = user_id
+    }
+
+    setName(name: string) {
+        this.name = name
     }
 
     selectDrawTile(room: string, index: number) {

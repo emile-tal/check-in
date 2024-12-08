@@ -87,12 +87,12 @@
         font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
 
         &--invalid {
-            border: 1px solid red;
+            border: 1px solid $red;
         }
     }
 
     &__error {
-        color: red;
+        color: $red;
         font-size: 0.75rem;
         padding: 0;
     }

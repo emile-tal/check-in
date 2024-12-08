@@ -32,7 +32,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     }
 
     interface newMultiplayerGame {
-        name: number
+        name: string
         draw_0: string
         draw_1: string
         draw_2: string
@@ -53,17 +53,19 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     }
 
     const createMultiplayerGame = async (jwtToken: string, newMultiplayerGame: newMultiplayerGame) => {
-        const { data } = await axios.post(`${baseUrl}games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
-        const { game } = data
-        socket.emit('join room', game.id)
-        setSelectedGame({ name: game.name, id: game.id })
+        if (selectedGame.id === 0) {
+            const { data } = await axios.post(`${baseUrl}games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { game } = data
+            socket.emit('join room', game.id)
+            setSelectedGame({ name: game.name, id: game.id })
+        }
     }
 
     useEffect(() => {
         const jwtToken = localStorage.getItem('jwt_token')
         if (isHostingGame) {
             if (jwtToken) {
-                const gameName = Date.now()
+                const gameName = game.name
                 const gameObject = {
                     name: gameName,
                     draw_0: game.drawTiles[0],
@@ -115,7 +117,6 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
         } else {
             setCanStartGame(false)
         }
-        console.log(playersJoined)
     })
 
     socket.on('start', (drawTiles: string[]) => {
@@ -141,7 +142,7 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
                     ))}
             </div>
             <div className='find-players__buttons'>
-                {joinedGame ? '' : <Button style={canStartGame ? 'primary' : 'primary-unclickable'} text={isHostingGame ? 'START GAME' : 'JOIN GAME'} onClick={isHostingGame ? startGame : joinRoom} />}
+                <Button style={isHostingGame ? canStartGame ? 'primary' : 'primary-unclickable' : joinedGame ? 'primary-unclickable' : 'primary'} text={isHostingGame ? 'START GAME' : 'JOIN GAME'} onClick={isHostingGame ? startGame : joinRoom} />
                 <Link to='/play-multiplayer'><Button style='primary' text='BACK' /></Link>
             </div>
         </div>

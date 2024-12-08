@@ -3,13 +3,13 @@
 
 .game-layout {
     min-height: 100vh;
-    min-width: 100vw;
+    width: 100vw;
     @include page-background;
 
     &__modal {
         width: 100%;
-        padding: 3rem 1rem;
-        background-color: #FFF;
+        padding: 2rem 1rem;
+        background-color: $primaryColor3;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -20,8 +20,8 @@
         border-radius: 10px;
         width: 90%;
         max-width: 40rem;
-        border: 3px solid $secondaryColor1;
         outline: 0;
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
     }
 
     &__modal-overlay {

@@ -15,7 +15,11 @@
 
     &__title {
         font-size: 3rem;
-        color: red;
+        color: $red;
+    }
+
+    &__points {
+        padding-bottom: 1rem;
     }
 
     &__link {

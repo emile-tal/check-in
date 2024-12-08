@@ -85,7 +85,7 @@ export function SavedGames() {
                 const drawTiles = [loadingGame.draw_0, loadingGame.draw_1, loadingGame.draw_2]
                 const tilesInPlay = loadingGameTiles.map(({ room, row, column }) => ({ room, row, column }))
                 game.loadGame(tilesInPlay, drawTiles, loadingGame.id)
-                navigate('/play')
+                navigate('/singleplayer')
             }
         }
     }

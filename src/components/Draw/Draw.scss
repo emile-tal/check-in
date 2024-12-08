@@ -32,10 +32,10 @@
     }
 
     &__draw-card {
-        @include tile;
         position: absolute;
         top: 0;
         left: 0;
+        @include tile;
     }
 
     &__draw-pile-card {
