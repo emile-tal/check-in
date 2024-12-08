@@ -1,16 +1,18 @@
 import './GameHeader.scss'
 
+import { InfoIcon } from '../InfoIcon/InfoIcon'
 import { SettingsIcon } from '../SettingsIcon/SettingsIcon'
 
 interface Props {
     totalPoints: number,
     turnsLeft: number
     openSettingsModal: () => void
+    openHelpModal: () => void
     isSingleplayer: boolean
     opponentPoints: number
 }
 
-export function GameHeader({ totalPoints, turnsLeft, openSettingsModal, isSingleplayer, opponentPoints }: Props) {
+export function GameHeader({ totalPoints, turnsLeft, openSettingsModal, openHelpModal, isSingleplayer, opponentPoints }: Props) {
     return (
         <header className='game-header'>
             <div className='game-header__container'>
@@ -19,7 +21,10 @@ export function GameHeader({ totalPoints, turnsLeft, openSettingsModal, isSingle
                     <span className='game-header__stats'>{`Turns left: ${turnsLeft}`}</span>
                     {isSingleplayer ? '' : <span className='game-header__stats'>{`Opponent points: ${opponentPoints}`}</span>}
                 </div>
-                <SettingsIcon openSettingsModal={openSettingsModal} />
+                <div className='game-header__icon-container'>
+                    <InfoIcon openHelpModal={openHelpModal} />
+                    <SettingsIcon openSettingsModal={openSettingsModal} />
+                </div>
             </div>
         </header>
     )

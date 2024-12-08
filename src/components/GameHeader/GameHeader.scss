@@ -44,4 +44,13 @@
             }
         }
     }
+
+    &__icon-container {
+        display: flex;
+        gap: 1rem;
+
+        @include tablet {
+            gap: 1.5rem
+        }
+    }
 }

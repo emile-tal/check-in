@@ -1,0 +1,15 @@
+@use '../../styles/mixins' as *;
+
+.info-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    @include tablet {
+        height: 1.75rem;
+        width: 1.75rem;
+    }
+}

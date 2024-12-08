@@ -1,0 +1,29 @@
+.help-modal {
+    font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
+    width: 85%;
+
+    &__heading {
+        padding-bottom: 2rem;
+    }
+
+    &__text {
+        padding: 2.5rem 0;
+        line-height: 1.5rem;
+    }
+
+    &__tiles {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__room-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    &__room-image {
+        width: 3.75rem;
+    }
+}

@@ -53,12 +53,10 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     }
 
     const createMultiplayerGame = async (jwtToken: string, newMultiplayerGame: newMultiplayerGame) => {
-        if (selectedGame.id === 0) {
-            const { data } = await axios.post(`${baseUrl}games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
-            const { game } = data
-            socket.emit('join room', game.id)
-            setSelectedGame({ name: game.name, id: game.id })
-        }
+        const { data } = await axios.post(`${baseUrl}games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        const { game } = data
+        socket.emit('join room', game.id)
+        setSelectedGame({ name: game.name, id: game.id })
     }
 
     useEffect(() => {

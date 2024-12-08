@@ -6,6 +6,7 @@ import { GameContainer } from "../../components/GameContainer/GameContainer"
 import { GameContext } from "../../App"
 import { GameHeader } from "../../components/GameHeader/GameHeader"
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal"
+import { HelpModal } from "../HelpModal/HelpModal"
 import Modal from 'react-modal'
 import { SettingsModal } from "../../components/SettingsModal/SettingsModal"
 import axios from "axios"
@@ -20,6 +21,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
     const game = useContext(GameContext)
     const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(false)
     const [settingsModalIsOpen, setSettingsModalIsOpen] = useState<boolean>(false)
+    const [helpModalIsOpen, setHelpModalIsOpen] = useState<boolean>(false)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [opponentPoints, setOpponentPoints] = useState<number>(0)
     const [opponentTurnsLeft, setOpponentTurnsLeft] = useState<number>(20)
@@ -97,6 +99,10 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
         setSettingsModalIsOpen(true)
     }
 
+    const openHelpModal = () => {
+        setHelpModalIsOpen(true)
+    }
+
     const restartGame = () => {
         game.restart()
         closeSettingsModal()
@@ -116,6 +122,10 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
 
     const closeSettingsModal = () => {
         setSettingsModalIsOpen(false)
+    }
+
+    const closeHelpModal = () => {
+        setHelpModalIsOpen(false)
     }
 
     const updateOpponentDetails = (opponentPoints: number, opponentTurnsLeft: number) => {
@@ -158,13 +168,16 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
 
     return (
         <div className="game-layout">
-            <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
+            <GameHeader turnsLeft={game.turnsLeft} totalPoints={game.totalPoints} openSettingsModal={openSettingsModal} openHelpModal={openHelpModal} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
             <GameContainer isSingleplayer={isSingleplayer} updateOpponentDetails={updateOpponentDetails} />
             <Modal isOpen={gameOverModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay'>
                 <GameOverModal closeGameOverModal={closeGameOverModal} totalPoints={game.totalPoints} isSingleplayer={isSingleplayer} opponentPoints={opponentPoints} />
             </Modal>
             <Modal isOpen={settingsModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay' onRequestClose={closeSettingsModal} >
                 <SettingsModal restartGame={restartGame} saveGame={saveGame} closeSettingsModal={closeSettingsModal} isLoggedIn={isLoggedIn} />
+            </Modal>
+            <Modal isOpen={helpModalIsOpen} className='game-layout__modal' overlayClassName='game-layout__modal-overlay' onRequestClose={closeHelpModal} >
+                <HelpModal closeHelpModal={closeHelpModal} />
             </Modal>
         </div>
     )
