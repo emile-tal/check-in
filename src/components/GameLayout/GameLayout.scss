@@ -8,7 +8,7 @@
 
     &__modal {
         width: 100%;
-        padding: 2rem;
+        padding: 1rem;
         background-color: $primaryColor3;
         display: flex;
         justify-content: center;
@@ -22,6 +22,10 @@
         max-width: 40rem;
         outline: 0;
         box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
+
+        @include tablet {
+            padding: 2rem;
+        }
     }
 
     &__modal-overlay {

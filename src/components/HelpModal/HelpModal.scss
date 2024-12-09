@@ -1,19 +1,40 @@
+@use '../../styles/mixins' as *;
+
 .help-modal {
     font-family: 'Comic Neue', Arial, Helvetica, sans-serif;
-    width: 90%;
+    width: 100%;
 
-    &__heading {
-        padding-bottom: 2rem;
+    @include tablet {
+        width: 90%;
+    }
+
+    &__header {
+        font-size: 1.2rem;
+
+        @include tablet {
+            font-size: 2rem;
+        }
     }
 
     &__text {
-        padding: 2rem 0;
-        line-height: 1.5rem;
+        padding: 1rem 0;
+        line-height: 1rem;
+        font-size: 0.8rem;
+
+        @include tablet {
+            padding: 2rem 0;
+            line-height: 1.5rem;
+        }
     }
 
     &__tiles {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+
+        @include tablet {
+            flex-wrap: nowrap;
+        }
     }
 
     &__room-container {
@@ -24,12 +45,29 @@
     }
 
     &__room-image {
-        width: 3.75rem;
+        border-radius: 5px;
+        width: 2rem;
+
+        @include tablet {
+            width: 3.75rem;
+        }
+    }
+
+    &__room-label {
+        font-size: 0.75rem;
+
+        @include tablet {
+            font-size: 1rem;
+        }
     }
 
     &__points-container {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
+        font-size: 0.75rem;
+
+        @include tablet {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
     }
 }
