@@ -16,10 +16,10 @@ The game has been deployed using netlify [here](https://emile-check-in.netlify.a
 4. Generate a JWT secret (for example using [this website](https://jwtsecret.com/generate)) and add it to the .env file of the back-end repository (see correct naming in the .env.sample file).
 5. Add the local back-end URL in a .env file in the root folder of the front-end repository (see correct naming in the .env.sample file).
 6. In the command terminal, change into the back-end directory and run the following command for migrations and seeding data to the local database:
-    - npx knex migrate:latest
-    - npx knex seed:run
+    - npm run migrate
+    - npm run seed
 7. Once all environment variables have been added, run both the back-end and front-end repositories in a local development environment. 
     - Two default accounts have been created with some game history.
-        - username: user password: password
-        - username: otheruser password: otherpassword
+        - username: user - password: password
+        - username: otheruser - password: otherpassword
 8. See if you can beat my highscore of 89!
