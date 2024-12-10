@@ -1,5 +1,3 @@
-import './GameMultiplayer.scss'
-
 import GameLayout from '../../components/GameLayout/GameLayout'
 
 export function GameMultiplayer() {
