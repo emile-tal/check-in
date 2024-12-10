@@ -114,7 +114,6 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
         if (canStartGame) {
             socket.emit('start game', { roomName: selectedGame.id, drawTiles: game.drawTiles })
             game.joinGame(selectedGame.id)
-            game.setUser(id)
             game.setPlayers(2)
             navigate('/multiplayer')
         }
