@@ -25,6 +25,7 @@ export function PlayMultiplayer() {
 
     const goToGame = (event: React.FormEvent) => {
         event.preventDefault()
+        game.restart()
         setInvalidGameName(false)
         if (gameName.trim() === '') {
             setInvalidGameName(true)
