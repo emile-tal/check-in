@@ -39,7 +39,7 @@ export function LoginForm({ login }: Props) {
 
     const registerUser = async (userDetails: User) => {
         try {
-            const { data } = await axios.post(`${baseUrl}users/register`, userDetails)
+            const { data } = await axios.post(`${baseUrl}/users/register`, userDetails)
             const { token } = data
             if (token) {
                 login(token)
@@ -61,7 +61,7 @@ export function LoginForm({ login }: Props) {
 
     const loginUser = async (userDetails: User) => {
         try {
-            const { data } = await axios.post(`${baseUrl}users/login`, userDetails)
+            const { data } = await axios.post(`${baseUrl}/users/login`, userDetails)
             const { token } = data
             if (token) {
                 login(token)

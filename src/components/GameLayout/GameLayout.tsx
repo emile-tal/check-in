@@ -34,7 +34,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
 
     const fetchStats = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}stats`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/stats`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             return data
         } catch (error) {
             console.error(error)
@@ -50,7 +50,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
                 total_points: total_points + game.totalPoints,
                 max_score: max_score < game.totalPoints ? game.totalPoints : max_score
             }
-            await axios.put(`${baseUrl}stats`, updatedStats, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            await axios.put(`${baseUrl}/stats`, updatedStats, { headers: { Authorization: `Bearer ${jwtToken}` } })
         } catch (error) {
             console.error(error)
         }
@@ -58,7 +58,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
 
     const gamePostPut = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             if (data.game) {
                 const gameData = {
                     name: game.name,
@@ -66,8 +66,8 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
                     draw_1: game.drawTiles[1],
                     draw_2: game.drawTiles[2],
                 }
-                await axios.put(`${baseUrl}games/${game.id}`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
-                await axios.put(`${baseUrl}games/${game.id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                await axios.put(`${baseUrl}/games/${game.id}`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                await axios.put(`${baseUrl}/games/${game.id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
                 navigate('/home')
                 game.restart()
             }
@@ -81,9 +81,9 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
                         draw_2: game.drawTiles[2],
                         is_singleplayer: true,
                     }
-                    const { data } = await axios.post(`${baseUrl}games/`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                    const { data } = await axios.post(`${baseUrl}/games/`, gameData, { headers: { Authorization: `Bearer ${jwtToken}` } })
                     const game_id = data.game.id
-                    await axios.put(`${baseUrl}games/${game_id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
+                    await axios.put(`${baseUrl}/games/${game_id}/tiles`, game.tilesInPlay, { headers: { Authorization: `Bearer ${jwtToken}` } })
                     navigate('/home')
                     game.restart()
                 } else {
@@ -96,7 +96,7 @@ const GameLayout = observer(function GameLayout({ isSingleplayer }: Props) {
     }
 
     const deleteSavedGame = async (jwtToken: string) => {
-        await axios.delete(`${baseUrl}games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        await axios.delete(`${baseUrl}/games/${game.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
     }
 
     const openSettingsModal = () => {

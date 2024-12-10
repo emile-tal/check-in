@@ -34,7 +34,7 @@ function App() {
 
   const fetchUser = async (jwtToken: string) => {
     try {
-      const { data } = await axios.get(`${baseUrl}users`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+      const { data } = await axios.get(`${baseUrl}/users`, { headers: { Authorization: `Bearer ${jwtToken}` } })
       const { username, id } = data
       setUser({ username, id })
     } catch (error) {

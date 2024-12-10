@@ -42,7 +42,7 @@ export function SavedGames({ parentUrl, isSingleplayer }: Props) {
 
     const fetchGames = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}games`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/games`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             const games: SavedGame[] = data.games
             if (isSingleplayer) {
                 setAllGames(games.filter((game) => game.is_singleplayer === 1))
@@ -56,7 +56,7 @@ export function SavedGames({ parentUrl, isSingleplayer }: Props) {
 
     const fetchGame = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}games/${selectedGame}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/games/${selectedGame}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             return data.game
         } catch (error) {
             console.error(error)
@@ -65,7 +65,7 @@ export function SavedGames({ parentUrl, isSingleplayer }: Props) {
 
     const fetchGameTiles = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}games/${selectedGame}/tiles`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/games/${selectedGame}/tiles`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             return data.tiles
         } catch (error) {
             console.error(error)

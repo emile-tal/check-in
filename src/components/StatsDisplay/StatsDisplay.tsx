@@ -16,7 +16,7 @@ export function StatsDisplay() {
 
     const fetchStats = async (jwtToken: string) => {
         try {
-            const { data } = await axios.get(`${baseUrl}stats`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            const { data } = await axios.get(`${baseUrl}/stats`, { headers: { Authorization: `Bearer ${jwtToken}` } })
             const { games_played_single, games_played_multi, total_points, max_score } = data
             setSingleplayerGames(games_played_single)
             setMultiplayerGames(games_played_multi)

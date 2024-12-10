@@ -44,20 +44,20 @@ export function FindPlayersDisplay({ isHostingGame }: Props) {
     const baseUrl = import.meta.env.VITE_API_URL
 
     const fetchMultiplayerGames = async (jwtToken: string) => {
-        const { data } = await axios.get(`${baseUrl}multi`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        const { data } = await axios.get(`${baseUrl}/multi`, { headers: { Authorization: `Bearer ${jwtToken}` } })
         const games: OpenMultiplayerGame[] = data.games
         setOpenGames(games)
     }
 
     const createMultiplayerGame = async (jwtToken: string, newMultiplayerGame: newMultiplayerGame) => {
-        const { data } = await axios.post(`${baseUrl}games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        const { data } = await axios.post(`${baseUrl}/games`, newMultiplayerGame, { headers: { Authorization: `Bearer ${jwtToken}` } })
         const { game } = data
         socket.emit('join room', game.id)
         setSelectedGame({ name: game.name, id: game.id })
     }
 
     const deleteMultiplayerGame = async (jwtToken: string) => {
-        await axios.delete(`${baseUrl}games/${selectedGame.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        await axios.delete(`${baseUrl}/games/${selectedGame.id}`, { headers: { Authorization: `Bearer ${jwtToken}` } })
     }
 
     useEffect(() => {
